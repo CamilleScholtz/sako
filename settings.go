@@ -18,7 +18,7 @@ func settings(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	c, err := coincapValues()
+	c, err := parseCoincap()
 	if err != nil {
 		log.Print(err)
 	}

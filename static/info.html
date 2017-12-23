@@ -74,7 +74,7 @@
 	ws.onmessage = function(evt) {
 		var msg = JSON.parse(evt.data);
 
-		document.title = document.title.replace(/\$[0-9.]*/,
+		document.title = document.title.replace(/[0-9.]*/,
 			msg.coincapCurrent);
 
 		document.getElementById("current").innerHTML = msg.coincapCurrent;

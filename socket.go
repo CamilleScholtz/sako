@@ -50,7 +50,7 @@ func writer(ws *websocket.Conn) {
 	for {
 		select {
 		case <-coincapTicker.C:
-			c, err := coincapValues()
+			c, err := parseCoincap()
 			if err != nil {
 				log.Printf("closing socket: %s", err)
 				return
