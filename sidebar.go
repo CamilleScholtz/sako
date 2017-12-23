@@ -27,10 +27,10 @@ func sidebarValues() (sidebar, error) {
 	}
 
 	// Generate QR image.
-	if _, err := os.Stat(path.Join("assets/images/qr", a.Address+
+	if _, err := os.Stat(path.Join("static/images/qr", a.Address+
 		".png")); os.IsNotExist(err) {
 		if err := qrcode.WriteFile(a.Address, qrcode.Medium, 175, path.Join(
-			"assets/images/qr", a.Address+".png")); err != nil {
+			"static/images/qr", a.Address+".png")); err != nil {
 			return sidebar{}, err
 		}
 	}

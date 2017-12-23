@@ -1,0 +1,29 @@
+#content #background {
+	position: absolute;
+	top: 150px;
+	width: 100%;
+}
+
+#content #graph {
+	max-height: 200px;
+}
+
+#content #gradient {
+	background: #FFFEFC;;
+	height: calc(100vh - 510px);
+}
+
+#content {
+	background: linear-gradient(to bottom, rgba(255, 206, 86, 0.05) 0%, rgba(255, 206, 86, 0.2) 20%);
+}
+
+#content #current-container {
+	bottom: 20px;
+	line-height: 10px;
+	margin-left: 40px;
+	position: absolute;
+}
+
+#content #current {
+	margin-left: -5px;
+}

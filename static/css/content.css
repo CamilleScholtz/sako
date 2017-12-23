@@ -1,0 +1,21 @@
+#content {
+	float: right;
+	position: relative;
+	width: calc(100% - 385px - 64px);
+}
+
+#content h1 {
+	font-size: 60px;
+}
+
+#content p {
+	font-size: 16px;
+}
+
+#content .text-red {
+	color: #F27173;
+}
+
+#content .text-green {
+	color: #4BC0C0;
+}

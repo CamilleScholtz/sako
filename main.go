@@ -13,11 +13,13 @@ var wallet = monero.NewWalletClient("http://127.0.0.1:18082/json_rpc",
 func main() {
 	// Create handle functions.
 	http.HandleFunc("/", info)
+	http.HandleFunc("/info", info)
+	http.HandleFunc("/settings", settings)
 	http.HandleFunc("/socket", socket)
 
 	// Set location of our assets.
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(
-		http.Dir("assets"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(
+		http.Dir("static"))))
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)

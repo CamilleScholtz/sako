@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-type infoModel struct {
+type settingsModel struct {
 	Title   string
 	Sidebar sidebar
 	Coincap coincap
 }
 
-func info(w http.ResponseWriter, r *http.Request) {
+func settings(w http.ResponseWriter, r *http.Request) {
 	sb, err := sidebarValues()
 	if err != nil {
 		log.Print(err)
@@ -23,9 +23,9 @@ func info(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	model := infoModel{"sako / info [" + c.Current + "]", sb, c}
+	model := infoModel{"sako / settings [" + c.Current + "]", sb, c}
 
-	t, err := template.ParseFiles("static/info.html")
+	t, err := template.ParseFiles("static/settings.html")
 	if err != nil {
 		log.Print(err)
 	}

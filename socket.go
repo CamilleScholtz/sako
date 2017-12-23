@@ -37,13 +37,11 @@ func reader(ws *websocket.Conn) {
 }
 
 func writer(ws *websocket.Conn) {
-	priceTicker := time.NewTicker(15 * time.Second)
-	graphTicker := time.NewTicker(15 * time.Second)
+	coincapTicker := time.NewTicker(15 * time.Second)
 	pingTicker := time.NewTicker(54 * time.Second)
 
 	defer func() {
-		priceTicker.Stop()
-		graphTicker.Stop()
+		coincapTicker.Stop()
 		pingTicker.Stop()
 
 		ws.Close()
@@ -51,8 +49,8 @@ func writer(ws *websocket.Conn) {
 
 	for {
 		select {
-		case <-priceTicker.C:
-			msg, err := priceValues()
+		case <-coincapTicker.C:
+			c, err := coincapValues()
 			if err != nil {
 				log.Printf("closing socket: %s", err)
 				return
@@ -60,20 +58,7 @@ func writer(ws *websocket.Conn) {
 
 			// TODO: Is this deadline needed?
 			ws.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := ws.WriteJSON(msg); err != nil {
-				log.Printf("closing socket: %s", err)
-				return
-			}
-		case <-graphTicker.C:
-			msg, err := graphValues(1)
-			if err != nil {
-				log.Printf("closing socket: %s", err)
-				return
-			}
-
-			// TODO: Is this deadline needed?
-			ws.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := ws.WriteJSON(msg); err != nil {
+			if err := ws.WriteJSON(c); err != nil {
 				log.Printf("closing socket: %s", err)
 				return
 			}

@@ -1,0 +1,22 @@
+@font-face {
+	font-family: "avenir heavy";
+	src: url('/static/fonts/avenir-heavy.woff2') format('woff2');
+}
+
+* {
+	color: #24374B;
+	font-family: "avenir heavy", sans serif;
+}
+
+body {
+	background: #FFFEFC;
+	height: calc(100vh - 160px);
+	margin: 80px;
+}
+
+#sidebar, #content {
+	background: #FFFEFC;
+	border-radius: 8px;
+	box-shadow: 0px 4px 66px -37px rgba(54, 163, 235, 0.6);
+	height: 100%;
+}
