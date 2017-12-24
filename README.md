@@ -2,6 +2,9 @@
 
 A self-hosted Monero web-interface. **WIP**
 
+![](https://punpun.moe/08Mb.png)
+
+
 ## SYNOPSIS
 
 sako [arguments]
