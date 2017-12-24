@@ -1,0 +1,20 @@
+{{define "head"}}
+
+<head>
+	<title>sako / {{.Template}} [{{.Coincap.Current}}]</title>
+
+	<link rel="stylesheet" href="/static/css/base.css">
+	<link rel="stylesheet" href="/static/css/sidebar.css">
+	<link rel="stylesheet" href="/static/css/content.css">
+	<link rel="stylesheet" href="/static/css/{{.Template}}.css">
+
+	<link rel="stylesheet" href="/static/vendor/css/font-awesome.min.css">
+	<script src="/static/vendor/js/moment.min.js"></script>
+	<script src="/static/vendor/js/Chart.min.js"></script>
+
+	<script>
+		{{template "javascript" .}}
+	</script>
+</head>
+
+{{end}}

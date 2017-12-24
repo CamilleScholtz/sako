@@ -1,0 +1,16 @@
+{{define "content"}}
+
+<div id="content">
+	<div id="background">
+		<canvas id="graph"></canvas>
+		<div id="gradient"></div>
+	</div>
+
+	<div id="current-container">
+		<p>1 XMR =</p>
+		<h1 id="current">{{.Coincap.Current}}</h1>
+		<h2 id="change">{{.Coincap.ChangePercent}} ({{.Coincap.ChangePrice}})</h2>
+	</div>
+</div>
+
+{{end}}

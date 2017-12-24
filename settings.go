@@ -23,7 +23,7 @@ func settings(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	model := infoModel{"sako / settings [" + c.Current + "]", sb, c}
+	model := settingsModel{"sako / settings [" + c.Current + "]", sb, c}
 
 	t, err := template.ParseFiles("static/settings.html")
 	if err != nil {
