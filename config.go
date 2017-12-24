@@ -7,9 +7,11 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-// config is a stuct with all config values. See `runtime/config.toml` for more
+var config Config
+
+// Config is a stuct with all config values. See `runtime/config.toml` for more
 // information about these values.
-var config struct {
+type Config struct {
 	Username string
 	Password string
 

@@ -10,18 +10,20 @@ import (
 	"github.com/olihawkins/decimals"
 )
 
-type coincap struct {
-	Date          []float64 `json:"coincapDate"`
-	Price         []float64 `json:"coincapPrice"`
-	Current       string    `json:"coincapCurrent"`
-	ChangePrice   string    `json:"coincapChangePrice"`
-	ChangePercent string    `json:"coincapChangePercent"`
+// Coincap is a stuct with all Coincap values.
+type Coincap struct {
+	Date          []float64 `json:"CoincapDate"`
+	Price         []float64 `json:"CoincapPrice"`
+	Current       string    `json:"CoincapCurrent"`
+	ChangePrice   string    `json:"CoincapChangePrice"`
+	ChangePercent string    `json:"CoincapChangePercent"`
 }
 
 type coincapJSON struct {
 	Price [][]float64 `json:"price"`
 }
 
+// get fetches and parses JSON from a specified URL.
 func (j *coincapJSON) get(url string) error {
 	c := &http.Client{Timeout: 10 * time.Second}
 
@@ -34,8 +36,10 @@ func (j *coincapJSON) get(url string) error {
 	return json.NewDecoder(r.Body).Decode(&j)
 }
 
-func parseCoincap() (coincap, error) {
-	c := coincap{}
+// parseCoincap fetches `/history/1day/XMR` JSON from Coincap and converts this
+// to usable data. In here we also decide what currency to use.
+func parseCoincap() (Coincap, error) {
+	c := Coincap{}
 
 	j := coincapJSON{}
 	if err := j.get("https://coincap.io/history/1day/XMR"); err != nil {
@@ -83,6 +87,8 @@ func parseCoincap() (coincap, error) {
 	return c, nil
 }
 
+// parseGraph converts the Coincap history data into something we can use with
+// Chart.js.
 func parseGraph(j [][]float64) ([]float64, []float64) {
 	var d, p []float64
 	for i := 0; i < len(j); i++ {

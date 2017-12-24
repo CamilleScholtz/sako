@@ -16,15 +16,21 @@ var upgrader = websocket.Upgrader{
 const (
 	// Time allowed to write the file to the client.
 	writeWait = 10 * time.Second
+
+	// Time allowed to read the next pong message from the client.
+	pongWait = 60 * time.Second
+
+	// Send pings to client with this period. Must be less than pongWait.
+	pingPeriod = (pongWait * 9) / 10
 )
 
 func reader(ws *websocket.Conn) {
 	defer ws.Close()
 
 	ws.SetReadLimit(512)
-	ws.SetReadDeadline(time.Now().Add(60 * time.Second))
+	ws.SetReadDeadline(time.Now().Add(pongWait))
 	ws.SetPongHandler(func(string) error {
-		ws.SetReadDeadline(time.Now().Add(60 * time.Second))
+		ws.SetReadDeadline(time.Now().Add(pongWait))
 		return nil
 	})
 
@@ -38,7 +44,7 @@ func reader(ws *websocket.Conn) {
 
 func writer(ws *websocket.Conn) {
 	coincapTicker := time.NewTicker(15 * time.Second)
-	pingTicker := time.NewTicker(54 * time.Second)
+	pingTicker := time.NewTicker(pingPeriod)
 
 	defer func() {
 		coincapTicker.Stop()

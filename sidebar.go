@@ -7,23 +7,26 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 )
 
-type sidebar struct {
+// Sidebar is a stuct with all sidebar values.
+type Sidebar struct {
 	Balance   float64
 	UnBalance float64
 	Address   string
 }
 
-func sidebarValues() (sidebar, error) {
+func parseSidebar() (Sidebar, error) {
+	s := Sidebar{}
+
 	// Get wallet balance.
 	b, err := wallet.GetBalance()
 	if err != nil {
-		return sidebar{}, err
+		return s, err
 	}
 
 	// Get wallet address.
 	a, err := wallet.GetAddress()
 	if err != nil {
-		return sidebar{}, err
+		return s, err
 	}
 
 	// Generate QR image.
@@ -31,13 +34,13 @@ func sidebarValues() (sidebar, error) {
 		".png")); os.IsNotExist(err) {
 		if err := qrcode.WriteFile(a.Address, qrcode.Medium, 175, path.Join(
 			"static/images/qr", a.Address+".png")); err != nil {
-			return sidebar{}, err
+			return s, err
 		}
 	}
 
-	return sidebar{
-		float64(b.Balance) / 1.e+12,
-		float64(b.UnBalance) / 1.e+12,
-		a.Address,
-	}, nil
+	s.Balance = float64(b.Balance) / 1.e+12
+	s.UnBalance = float64(b.UnBalance) / 1.e+12
+	s.Address = a.Address
+
+	return s, nil
 }

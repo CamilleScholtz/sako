@@ -1,0 +1,19 @@
+{{define "content"}}
+
+<div id="content">
+	<div id="background">
+		<canvas id="graph"></canvas>
+		<div id="gradient"></div>
+	</div>
+
+	<form action="/settings" method="post">
+		<select name="currency">
+			<option value="USD" {{if eq .Config.Currency "USD"}}selected{{end}}>USD</option>
+			<option value="EUR" {{if eq .Config.Currency "EUR"}}selected{{end}}>EUR</option>
+		</select>
+
+		<input type="submit" value="Save">
+	</form>
+</div>
+
+{{end}}

@@ -8,12 +8,12 @@ import (
 
 type infoModel struct {
 	Template string
-	Sidebar  sidebar
-	Coincap  coincap
+	Sidebar  Sidebar
+	Coincap  Coincap
 }
 
 func info(w http.ResponseWriter, r *http.Request) {
-	sb, err := sidebarValues()
+	sb, err := parseSidebar()
 	if err != nil {
 		log.Print(err)
 	}
