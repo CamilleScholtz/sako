@@ -5,17 +5,23 @@ var ws = new WebSocket("ws://" + window.location.host + "/socket");
 ws.onmessage = function(evt) {
 	var msg = JSON.parse(evt.data);
 
-	document.title = document.title.replace(/\[.[0-9\.]*]/, "[" +
-		msg.CryptoCompareSymbol + msg.CryptoComparePrice + "]");
+	if (document.getElementById("price").innerHTML == msg.CryptoComparePrice) {
+		return;
+	}
 
-	document.getElementById("price-js").innerHTML = msg.CryptoComparePrice;
-	document.getElementById("change-price-js").innerHTML = msg.CryptoCompareChangePrice;
-	document.getElementById("change-percent-js").innerHTML = msg.CryptoCompareChangePercent;
-	colorizeCurrent();
+	document.title = document.title.replace(/\[.*\]/, "[" +
+		msg.CryptoComparePrice + "]");
 
 	graphData.labels = msg.CryptoCompareGraphTime;
 	graphData.datasets[0].data = msg.CryptoCompareGraphPrice;
 	window.graph.update();
+
+	colorizeAndAnimatePrice();
+	sleep(400).then(() => {
+		document.getElementById("price").innerHTML = msg.CryptoComparePrice;
+		document.getElementById("change").innerHTML = msg.CryptoCompareChangePercent +
+			" (" + msg.CryptoCompareChangePrice + ")";
+	});
 }
 
 var graphData = {
@@ -32,7 +38,7 @@ var graphData = {
 };
 
 window.onload = function() {
-	colorizeCurrent();
+	colorizeAndAnimatePrice();
 
 	var ctx = document.getElementById("graph").getContext("2d");
 	ctx.globalCompositeOperation = "destination-over";
@@ -60,12 +66,19 @@ window.onload = function() {
 	});
 }
 
-function colorizeCurrent() {
-	if (document.getElementById("change-percent-span").textContent > 0) {
+function colorizeAndAnimatePrice() {
+	if (document.getElementById("change").textContent.charAt(0) == "+") {
 		document.getElementById("change").className = "text-green";
 	} else {
 		document.getElementById("change").className = "text-red";
 	}
+
+	document.getElementById("price").animate("bounce");
+	document.getElementById("change").animate("bounce");
+}
+
+function sleep (time) {
+	return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 {{end}}

@@ -4,8 +4,12 @@
 	{{template "head" .}}
 
 	<body>
-		{{template "sidebar" .}}
+		<div id="sidebar">
+			{{template "sidebar" .}}
+		</div>
 
-		{{template "content" .}}
+		<div id="content">
+			{{template "content" .}}
+		</div>
 	</body>
 </html>

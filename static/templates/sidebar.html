@@ -1,41 +1,39 @@
 {{define "sidebar"}}
 
-<div id="sidebar">
-	<div id="card-container">
-		<div id="card">
-			<div id="front">
-				<div id="monero">
-					<img src="/static/images/monero.svg"></img>
-					<span>MONERO</span>
-				</div>
-
-				</br>
-
-				<div class="balance-label">Your balance</div>
-				<div class="balance">{{.Sidebar.Balance}}</div>
-
-				</br>
-
-				<div class="balance-label">Unlocked Balance</div>
-				<div class="balance">{{.Sidebar.UnBalance}}</div>
+<div id="card-container">
+	<div id="card">
+		<div id="front">
+			<div id="monero">
+				<img src="/static/images/monero.svg"></img>
+				<span>MONERO</span>
 			</div>
 
-			<div id="back">
-				<img id="qr" src="/static/images/qr/{{.Sidebar.Address}}.png"></img>
-			</div>
+			</br>
+
+			<div class="balance-label">Your balance</div>
+			<div class="balance">{{.Sidebar.Balance}}</div>
+
+			</br>
+
+			<div class="balance-label">Unlocked Balance</div>
+			<div class="balance">{{.Sidebar.UnBalance}}</div>
+		</div>
+
+		<div id="back">
+			<img id="qr" src="/static/images/qr/{{.Sidebar.Address}}.png"></img>
 		</div>
 	</div>
-
-	<ul>
-		<li {{if eq .Template "info"}}class="active"{{end}}><a href="/info"><i class="fa fa-area-chart"></i>Info</a></li>
-		<li {{if eq .Template "send"}}class="active"{{end}}><a href="/send"><i class="fa fa-send"></i>Send</a></li>
-		<li {{if eq .Template "receive"}}class="active"{{end}}><a href="/receive"><i class="fa fa-send fa-flip-horizontal"></i>Receive</a></li>
-		<li {{if eq .Template "address-book"}}class="active"{{end}}><a href="/address-book"><i class="fa fa-address-book"></i>Address book</a></li>
-		<li {{if eq .Template "history"}}class="active"{{end}}><a href="/history"><i class="fa fa-history"></i>History</a></li>
-		<li {{if eq .Template "advanced"}}class="active"{{end}}><a href="/advanced"><i class="fa fa-ellipsis-h"></i>Advanced</a></li>
-		<li {{if eq .Template "settings"}}class="active"{{end}}><a href="/settings"><i class="fa fa-wrench"></i>Settings</a></li>
-		<li {{if eq .Template "about"}}class="active"{{end}}><a href="/about"><i class="fa fa-question"></i>About</a></li>
-	</ul>
 </div>
+
+<ul>
+	<li {{if eq .Template "info"}}class="active"{{end}}><a href="/info"><i class="fa fa-area-chart"></i>Info</a></li>
+	<li {{if eq .Template "send"}}class="active"{{end}}><a href="/send"><i class="fa fa-send"></i>Send</a></li>
+	<li {{if eq .Template "receive"}}class="active"{{end}}><a href="/receive"><i class="fa fa-send fa-flip-horizontal"></i>Receive</a></li>
+	<li {{if eq .Template "address-book"}}class="active"{{end}}><a href="/address-book"><i class="fa fa-address-book"></i>Address book</a></li>
+	<li {{if eq .Template "history"}}class="active"{{end}}><a href="/history"><i class="fa fa-history"></i>History</a></li>
+	<li {{if eq .Template "advanced"}}class="active"{{end}}><a href="/advanced"><i class="fa fa-ellipsis-h"></i>Advanced</a></li>
+	<li {{if eq .Template "settings"}}class="active"{{end}}><a href="/settings"><i class="fa fa-wrench"></i>Settings</a></li>
+	<li {{if eq .Template "about"}}class="active"{{end}}><a href="/about"><i class="fa fa-question"></i>About</a></li>
+</ul>
 
 {{end}}

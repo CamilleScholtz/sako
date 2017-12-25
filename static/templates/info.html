@@ -1,16 +1,14 @@
 {{define "content"}}
 
-<div id="content">
-	<div id="background">
-		<canvas id="graph"></canvas>
-		<div id="gradient"></div>
-	</div>
+<div id="background">
+	<canvas id="graph"></canvas>
+	<div id="gradient"></div>
+</div>
 
-	<div id="price-container">
-		<p>1 XMR =</p>
-		<h1 id="price">{{.CryptoCompare.Symbol}}<span id="price-span">{{.CryptoCompare.Price}}</span></h1>
-		<h2 id="change"><span id="change-percent-span">{{.CryptoCompare.ChangePercent}}</span>% ({{.CryptoCompare.Symbol}}<span id="change-price-span">{{.CryptoCompare.ChangePrice}}</span>)</h2>
-	</div>
+<div id="price-container">
+	<p>1 XMR =</p>
+	<h1 id="price">{{.CryptoCompare.Price}}</h1>
+	<h2 id="change">{{.CryptoCompare.ChangePercent}} ({{.CryptoCompare.ChangePrice}})</h2>
 </div>
 
 {{end}}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"math"
 	"net/http"
 	"reflect"
 	"time"
@@ -14,10 +15,9 @@ type CryptoCompare struct {
 	GraphTime  []int     `json:"CryptoCompareGraphTime"`
 	GraphPrice []float64 `json:"CryptoCompareGraphPrice"`
 
-	Symbol        string  `json:"CryptoCompareSymbol"`
-	Price         float64 `json:"CryptoComparePrice"`
-	ChangePercent float64 `json:"CryptoCompareChangePercent"`
-	ChangePrice   float64 `json:"CryptoCompareChangePrice"`
+	Price         string `json:"CryptoComparePrice"`
+	ChangePercent string `json:"CryptoCompareChangePercent"`
+	ChangePrice   string `json:"CryptoCompareChangePrice"`
 }
 
 // getAndUnmarshal fetches and parses JSON from a specified URL.
@@ -36,16 +36,16 @@ func getAndUnmarshal(url string, t interface{}) error {
 func cryptoCompare() (CryptoCompare, error) {
 	c := CryptoCompare{}
 
-	// Fetch 24 hour history.
-	var histoday = struct {
+	// Fetch 48 hours of price history.
+	var histohour = struct {
 		Data []struct {
 			Close float64 `json:"close"`
 			Time  int     `json:"time"`
 		} `json:"Data"`
 	}{}
 	if err := getAndUnmarshal(
-		"https://min-api.cryptocompare.com/data/histoday?fsym=XMR&limit=45&tsym="+
-			config.Currency, &histoday); err != nil {
+		"https://min-api.cryptocompare.com/data/histohour?fsym=XMR&limit=48&tsym="+
+			config.Currency, &histohour); err != nil {
 		return c, err
 	}
 
@@ -60,24 +60,36 @@ func cryptoCompare() (CryptoCompare, error) {
 		return c, err
 	}
 
-	for _, p := range histoday.Data {
+	// Write history to CryptoCompare struct.
+	for _, p := range histohour.Data {
 		c.GraphTime = append(c.GraphTime, p.Time)
 		c.GraphPrice = append(c.GraphPrice, p.Close)
 	}
 
+	// Refelected value of price, for later usage.
+	p := reflect.Indirect(reflect.ValueOf(price)).FieldByName(
+		config.Currency).Float()
+
+	// Symbol to use.
+	var sym string
 	switch config.Currency {
 	case "EUR":
-		c.Symbol = "€"
+		sym = "€"
 	case "USD":
-		c.Symbol = "$"
+		sym = "$"
 	}
-	// TODO: These values sometimes only display one decimal, I don't want that.
-	c.Price = reflect.Indirect(reflect.ValueOf(price)).FieldByName(
-		config.Currency).Float()
-	c.ChangePercent = decimals.RoundFloat(((c.GraphPrice[len(c.GraphPrice)-1]/
-		c.Price)-1)*100, 2)
-	c.ChangePrice = decimals.RoundFloat(c.Price-c.GraphPrice[len(c.GraphPrice)-
-		1], 2)
+
+	// Did the price go up or down?
+	dir := "+"
+	if p < c.GraphPrice[0] {
+		dir = "-"
+	}
+
+	// Write other values to CryptoCompare struct.
+	c.Price = sym + decimals.FormatFloat(p, 2)
+	c.ChangePercent = dir + " " + decimals.FormatFloat(math.Abs(((p/
+		c.GraphPrice[0])-1)*100), 2) + "%"
+	c.ChangePrice = sym + decimals.FormatFloat(math.Abs(p-c.GraphPrice[0]), 2)
 
 	return c, nil
 }
