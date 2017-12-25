@@ -1,15 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path"
-
-	"github.com/BurntSushi/toml"
+	"regexp"
 )
 
 // TODO: Possibly use an universal model.
@@ -24,28 +22,27 @@ func settings(w http.ResponseWriter, r *http.Request) {
 	// Handle POST requests.
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
-			log.Print(err)
+			log.Fatal(err)
 		}
-
-		// Set new values.
-		config.Currency = r.FormValue("currency")
 
 		d, err := os.Getwd()
 		if err != nil {
-			log.Print(err)
+			log.Fatal(err)
 		}
 
-		// Write to config file.
-		// TODO: I can't seem to use the encode function without overwriting
-		// formatting and comments.
-		buf := new(bytes.Buffer)
-		if err := toml.NewEncoder(buf).Encode(config); err != nil {
-			log.Print(err)
+		f, err := ioutil.ReadFile(path.Join(d, "runtime", "config.toml"))
+		if err != nil {
+			log.Fatal(err)
 		}
-		ioutil.WriteFile(path.Join(d, "runtime", "config.toml"), buf.Bytes(),
-			0664)
 
-		// Re-parse config file.
+		f = replaceConfig(f, "currency", r.FormValue("currency"))
+
+		if err := ioutil.WriteFile(path.Join(d, "runtime", "config.toml"), f,
+			0644); err != nil {
+			log.Fatal(err)
+		}
+
+		// Re-parse the config file.
 		if err := parseConfig(); err != nil {
 			log.Fatal(err)
 		}
@@ -77,4 +74,13 @@ func settings(w http.ResponseWriter, r *http.Request) {
 	if err := t.Execute(w, model); err != nil {
 		log.Print(err)
 	}
+}
+
+func replaceConfig(f []byte, k, v string) []byte {
+	re := regexp.MustCompile(
+		"(?m)(^[[:space:]]*" + k +
+			"[[:space:]]*=[[:space:]]*\")[[:upper:]]*(\".*)")
+	f = re.ReplaceAll(f, []byte("${1}"+v+"${2}"))
+
+	return f
 }

@@ -15,10 +15,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Create handle functions.
+	// Set root handler.
 	http.HandleFunc("/", info)
+
+	// Set various other handlers.
 	http.HandleFunc("/info", info)
 	http.HandleFunc("/settings", settings)
+	http.HandleFunc("/about", about)
+
+	// Handle WebSockets.
 	http.HandleFunc("/socket", socket)
 
 	// Set location of our assets.

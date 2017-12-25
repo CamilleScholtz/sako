@@ -52,11 +52,6 @@ func parseCoincap() (Coincap, error) {
 	changePrice := c.Price[0] - current
 	changePercent := (changePrice / c.Price[0]) * 100
 
-	dir := "+"
-	if c.Price[0] > c.Price[len(c.Price)-1] {
-		dir = "-"
-	}
-
 	var sym string
 	switch config.Currency {
 	case "USD":
@@ -74,14 +69,17 @@ func parseCoincap() (Coincap, error) {
 		}
 		current = scc.Convert(current)
 		changePrice = scc.Convert(changePrice)
-		changePercent = scc.Convert(changePercent)
 	default:
 		return c, fmt.Errorf("coincap: %s is not a valid currency",
 			config.Currency)
 	}
 
+	dir := "+"
+	if c.Price[0] > c.Price[len(c.Price)-1] {
+		dir = "-"
+	}
 	c.Current = sym + decimals.FormatFloat(current, 2)
-	c.ChangePrice = dir + sym + decimals.FormatFloat(changePrice, 2)
+	c.ChangePrice = sym + decimals.FormatFloat(changePrice, 2)
 	c.ChangePercent = dir + decimals.FormatFloat(changePercent, 2) + "%"
 
 	return c, nil
