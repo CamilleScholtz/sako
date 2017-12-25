@@ -3,4 +3,4 @@ username = "onodera"
 password = "seekrit"
 
 # The currency to compare XMR to, choose between `USD` or `EUR`.
-currency = "USD"
+currency = "EUR"

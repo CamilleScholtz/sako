@@ -14,7 +14,7 @@ type Sidebar struct {
 	Address   string
 }
 
-func parseSidebar() (Sidebar, error) {
+func sidebar() (Sidebar, error) {
 	s := Sidebar{}
 
 	// Get wallet balance.

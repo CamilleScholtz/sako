@@ -6,10 +6,10 @@
 		<div id="gradient"></div>
 	</div>
 
-	<div id="current-container">
+	<div id="price-container">
 		<p>1 XMR =</p>
-		<h1 id="current">{{.Coincap.Current}}</h1>
-		<h2 id="change">{{.Coincap.ChangePercent}} ({{.Coincap.ChangePrice}})</h2>
+		<h1 id="price">{{.CryptoCompare.Symbol}}<span id="price-span">{{.CryptoCompare.Price}}</span></h1>
+		<h2 id="change"><span id="change-percent-span">{{.CryptoCompare.ChangePercent}}</span>% ({{.CryptoCompare.Symbol}}<span id="change-price-span">{{.CryptoCompare.ChangePrice}}</span>)</h2>
 	</div>
 </div>
 

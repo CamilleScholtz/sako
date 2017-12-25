@@ -17,13 +17,18 @@
 	background: linear-gradient(to bottom, rgba(255, 206, 86, 0.05) 0%, rgba(255, 206, 86, 0.2) 20%);
 }
 
-#content #current-container {
+#content #price-container {
 	bottom: 20px;
 	line-height: 10px;
 	margin-left: 40px;
 	position: absolute;
 }
 
-#content #current {
+#content #price {
 	margin-left: -5px;
+}
+
+#content #change-percent-span,
+#content #change-price-span {
+	color: inherit;
 }

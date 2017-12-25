@@ -7,18 +7,18 @@ import (
 )
 
 type aboutModel struct {
-	Template string
-	Sidebar  Sidebar
-	Coincap  Coincap
+	Template      string
+	Sidebar       Sidebar
+	CryptoCompare CryptoCompare
 }
 
 func about(w http.ResponseWriter, r *http.Request) {
-	sb, err := parseSidebar()
+	sb, err := sidebar()
 	if err != nil {
 		log.Print(err)
 	}
 
-	c, err := parseCoincap()
+	c, err := cryptoCompare()
 	if err != nil {
 		log.Print(err)
 	}

@@ -12,10 +12,10 @@ import (
 
 // TODO: Possibly use an universal model.
 type settingsModel struct {
-	Template string
-	Sidebar  Sidebar
-	Coincap  Coincap
-	Config   Config
+	Template      string
+	Sidebar       Sidebar
+	CryptoCompare CryptoCompare
+	Config        Config
 }
 
 func settings(w http.ResponseWriter, r *http.Request) {
@@ -48,12 +48,12 @@ func settings(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	sb, err := parseSidebar()
+	sb, err := sidebar()
 	if err != nil {
 		log.Print(err)
 	}
 
-	c, err := parseCoincap()
+	c, err := cryptoCompare()
 	if err != nil {
 		log.Print(err)
 	}

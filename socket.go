@@ -43,11 +43,11 @@ func reader(ws *websocket.Conn) {
 }
 
 func writer(ws *websocket.Conn) {
-	coincapTicker := time.NewTicker(15 * time.Second)
+	cryptoCompareTicker := time.NewTicker(15 * time.Second)
 	pingTicker := time.NewTicker(pingPeriod)
 
 	defer func() {
-		coincapTicker.Stop()
+		cryptoCompareTicker.Stop()
 		pingTicker.Stop()
 
 		ws.Close()
@@ -55,8 +55,8 @@ func writer(ws *websocket.Conn) {
 
 	for {
 		select {
-		case <-coincapTicker.C:
-			c, err := parseCoincap()
+		case <-cryptoCompareTicker.C:
+			c, err := cryptoCompare()
 			if err != nil {
 				log.Printf("closing socket: %s", err)
 				return
