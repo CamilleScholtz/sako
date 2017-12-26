@@ -16,16 +16,24 @@
 }
 
 #sidebar #card {
-	background: url(../images/card.svg) 100px 31%/100% no-repeat,
-		 linear-gradient(135deg, #24374b 0%, #3e4d6b 42%);
+	background: linear-gradient(142deg, #1F5887 0%, #425989 55%, #3D547C 56%, #425989 100%);
 	border-radius: 18px;
 	box-shadow: 0px 2px 66px -37px rgba(54, 163, 235, 1),
 		0px 2px 20px -10px rgba(36, 55, 75, 0.5);
 	height: 215px;
 	margin: 45px 25px 65px 25px;
+	overflow: hidden;
 	position: relative;
 	transform-style: preserve-3d;
 	transition: 0.6s 0.2s;
+}
+
+#sidebar #particles-js {
+	height: calc(100% + 128px);
+	margin-left: -64px;
+	margin-top: -64px;
+	position: absolute;
+	width: calc(100% + 128px);
 }
 
 #sidebar #front,
@@ -77,9 +85,8 @@
 }
 
 #sidebar #qr {
-	border-radius: 20px;
 	float: right;
-	padding: 20px;
+	margin: -5px;
 }
 
 
@@ -118,4 +125,13 @@
 #sidebar ul .active {
 	border-left: 3px solid rgba(255, 206, 86, 1);
 	box-shadow: inset 0px 1px 66px -37px rgba(255, 206, 86, 0.4);
+}
+
+
+/* Height meter */
+
+#sidebar #height {
+	bottom: 100px;
+	margin-left: 10px;
+	position: absolute;
 }
