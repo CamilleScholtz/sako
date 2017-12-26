@@ -15,6 +15,9 @@ type Config struct {
 	Username string
 	Password string
 
+	RPC  string
+	Host string
+
 	Currency string
 }
 

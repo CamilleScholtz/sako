@@ -7,13 +7,15 @@ import (
 	"github.com/sunrisedo/monero"
 )
 
-var wallet = monero.NewWalletClient("http://127.0.0.1:18082/json_rpc",
-	"onodera", "seekrit")
+var wallet *monero.WalletClient
 
 func main() {
 	if err := parseConfig(); err != nil {
 		log.Fatal(err)
 	}
+
+	wallet = monero.NewWalletClient("http://"+config.RPC+"/json_rpc",
+		config.Username, config.Password)
 
 	// Set root handler.
 	http.HandleFunc("/", info)
@@ -30,7 +32,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(
 		http.Dir("static"))))
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(config.Host, nil); err != nil {
 		log.Fatal(err)
 	}
 }

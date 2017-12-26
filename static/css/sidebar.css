@@ -16,19 +16,25 @@
 }
 
 #sidebar #card {
-	background: linear-gradient(142deg, #1F5887 0%, #425989 55%, #3D547C 56%, #425989 100%);
+	background: linear-gradient(156deg, #1F5887 0%, #425989 55%, #3D547C 56%, #425989 100%);
 	border-radius: 18px;
-	box-shadow: 0px 2px 66px -37px rgba(54, 163, 235, 1),
-		0px 2px 20px -10px rgba(36, 55, 75, 0.5);
+	box-shadow: 0px 3px 80px -15px rgba(54, 163, 235, 0.5),
+		0px 2px 20px -5px rgba(36, 55, 75, 0.6);
 	height: 215px;
 	margin: 45px 25px 65px 25px;
-	overflow: hidden;
 	position: relative;
 	transform-style: preserve-3d;
 	transition: 0.6s 0.2s;
+
 }
 
-#sidebar #particles-js {
+#sidebar #particles-container {
+	height: 215px;
+	overflow: hidden;
+	position: relative;
+}
+
+#sidebar #particles {
 	height: calc(100% + 128px);
 	margin-left: -64px;
 	margin-top: -64px;
@@ -55,36 +61,35 @@
 }
 
 #sidebar #monero img {
-	width: 32px;
+	filter: drop-shadow(0px 1px 10px #2B3459);
+	width: 34px;
+	margin-top: -8px;
 }
 
 #sidebar #monero span {
 	color: #FFFEFC;
 	font-weight: bold;
 	font-size: 24px;
-	margin-top: 2px;
+	margin-top: -4px;
 	margin-left: 10px;
 	position: absolute;
+	text-shadow: 0px 1px 10px #2B3459;
 }
 
 #sidebar .balance-label {
-	color: #B9B9B9;
+	color: #FFFEFC;
 	font-size: 14px;
-	text-shadow: 0px 1px 0px #14273B,
-		-1px 0px 0px #14273B,
-		-1px 1px 1px #14273B,
-		0px -1px 0px #E0E0E0,
-		1px 0px 0px #E0E0E0,
-		1px -1px 1px #E0E0E0,
-		0px 2px 2px #14273B;
+	text-shadow: 0px 0px 5px #2B3459;
 }
 
 #sidebar .balance {
 	color: #FFFEFC;
 	font-size: 24px;
+	text-shadow: 0px 1px 10px #2B3459;
 }
 
 #sidebar #qr {
+	filter: drop-shadow(0px 1px 10px #2B3459);
 	float: right;
 	margin: -5px;
 }
