@@ -14,7 +14,8 @@ type Sidebar struct {
 	Balance   float64
 	UnBalance float64
 	Address   string
-	Height    int64
+	CurHeight int64
+	MaxHeight int
 }
 
 func sidebar() (Sidebar, error) {
@@ -33,8 +34,12 @@ func sidebar() (Sidebar, error) {
 		return s, err
 	}
 
-	// Get the wallet's current block height.
-	h, err := wallet.GetHeight()
+	// Get the wallets current and max block height.
+	ch, err := wallet.GetHeight()
+	if err != nil {
+		return s, err
+	}
+	mh, err := daemon.GetBlockCount()
 	if err != nil {
 		return s, err
 	}
@@ -51,7 +56,8 @@ func sidebar() (Sidebar, error) {
 	s.Balance = float64(b.Balance) / 1.e+12
 	s.UnBalance = float64(b.UnBalance) / 1.e+12
 	s.Address = a.Address
-	s.Height = h.Height
+	s.CurHeight = ch.Height
+	s.MaxHeight = mh.Count
 
 	return s, nil
 }

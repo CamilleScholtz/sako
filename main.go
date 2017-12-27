@@ -7,6 +7,7 @@ import (
 	"github.com/sunrisedo/monero"
 )
 
+var daemon *monero.DaemonClient
 var wallet *monero.WalletClient
 
 func main() {
@@ -14,6 +15,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	daemon = monero.NewDaemonClient("http://" + config.Daemon + "/json_rpc")
 	wallet = monero.NewWalletClient("http://"+config.RPC+"/json_rpc",
 		config.Username, config.Password)
 

@@ -4,12 +4,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/SlyMarbo/rss"
 )
 
 type infoModel struct {
 	Template      string
 	Sidebar       Sidebar
 	CryptoCompare CryptoCompare
+	Feed          []string
 }
 
 func info(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +26,17 @@ func info(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	model := infoModel{"info", sb, c}
+	f, err := rss.Fetch("http://monero-observer.com/feed.rss")
+	if err != nil {
+		log.Print(err)
+	}
+
+	var feed []string
+	for _, i := range f.Items {
+		feed = append(feed, i.Title)
+	}
+
+	model := infoModel{"info", sb, c, feed}
 
 	t, err := template.ParseFiles(
 		"static/templates/layout.html",

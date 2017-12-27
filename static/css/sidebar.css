@@ -17,7 +17,7 @@
 
 #sidebar #card {
 	background: linear-gradient(156deg, #1F5887 0%, #425989 55%, #3D547C 56%, #425989 100%);
-	border-radius: 18px;
+	border-radius: 10px;
 	box-shadow: 0px 3px 80px -15px rgba(54, 163, 235, 0.5),
 		0px 2px 20px -5px rgba(36, 55, 75, 0.6);
 	height: 215px;
@@ -149,6 +149,21 @@
 
 #sidebar #height {
 	bottom: 100px;
-	margin-left: 10px;
+	margin-left: 20px;
 	position: absolute;
+	width: 342px;
+}
+
+#sidebar meter {
+	background: none;
+	border: 3px solid rgba(255, 206, 86, 1);
+	border-radius: 12px;
+	height: 14px;
+	width: 100%;
+}
+
+#sidebar meter::-moz-meter-bar {
+	background: none;
+	box-shadow: inset 0px 0px 10px rgba(255, 206, 86, 0.75),
+		0px 1px 66px -37px rgba(255, 206, 86, 0.4);
 }

@@ -12,10 +12,12 @@ var config Config
 // Config is a stuct with all config values. See `runtime/config.toml` for more
 // information about these values.
 type Config struct {
+	Daemon string
+	RPC    string
+
 	Username string
 	Password string
 
-	RPC  string
 	Host string
 
 	Currency string
