@@ -3,7 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/sunrisedo/monero"
 )
 
@@ -19,22 +21,28 @@ func main() {
 	wallet = monero.NewWalletClient("http://"+config.RPC+"/json_rpc",
 		config.Username, config.Password)
 
+	r := mux.NewRouter()
+
 	// Set root handler.
-	http.HandleFunc("/", info)
+	r.HandleFunc("/", info)
 
 	// Set various other handlers.
-	http.HandleFunc("/info", info)
-	http.HandleFunc("/settings", settings)
-	http.HandleFunc("/about", about)
+	r.HandleFunc("/info", info)
+	r.HandleFunc("/settings", settings)
+	r.HandleFunc("/about", about)
 
 	// Handle WebSockets.
-	http.HandleFunc("/socket", socket)
+	r.HandleFunc("/socket", socket)
 
-	// Set location of our assets.
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(
-		http.Dir("static"))))
+	// Set location of the static assets.
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
+		http.FileServer(http.Dir("static"))))
 
-	if err := http.ListenAndServe(config.Host, nil); err != nil {
-		log.Fatal(err)
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         config.Host,
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
+	log.Fatal(srv.ListenAndServe())
 }
