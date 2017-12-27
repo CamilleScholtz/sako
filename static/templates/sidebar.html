@@ -25,6 +25,16 @@
 		</div>
 
 		<div id="back">
+			<div id="address" class="balance-label" onclick="selectAll('address')">{{.Sidebar.Address}}</div>
+			<script type="text/javascript">
+				function selectAll(e) {
+					var r = document.createRange();
+					r.selectNode(document.getElementById(e));
+					window.getSelection().removeAllRanges();
+					window.getSelection().addRange(r);
+				}
+			</script>
+
 			<img id="qr" src="/static/images/qr/{{.Sidebar.Address}}.png"></img>
 		</div>
 	</div>

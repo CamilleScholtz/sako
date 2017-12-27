@@ -6,7 +6,7 @@ import (
 
 	"image/color"
 
-	qrcode "github.com/onodera-punpun/go-qrcode"
+	qrcode "github.com/skip2/go-qrcode"
 )
 
 // Sidebar is a stuct with all sidebar values.
