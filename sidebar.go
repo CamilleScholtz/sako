@@ -9,7 +9,7 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 )
 
-// Sidebar is a stuct with all sidebar values.
+// Sidebar is a stuct with all the values needed in the sidebar templates.
 type Sidebar struct {
 	Balance   float64
 	UnBalance float64
@@ -18,46 +18,38 @@ type Sidebar struct {
 	MaxHeight int
 }
 
-func sidebar() (Sidebar, error) {
-	s := Sidebar{}
-
+func sidebar() (s Sidebar, err error) {
 	// Get wallet balance.
-	// TODO: Make this always use the same amount of decimals.
-	b, err := wallet.GetBalance()
+	s.Balance, s.UnBalance, err = walletBalance()
 	if err != nil {
 		return s, err
 	}
 
 	// Get wallet address.
-	a, err := wallet.GetAddress()
+	s.Address, err = walletAddress()
 	if err != nil {
 		return s, err
 	}
 
-	// Get the wallets current and max block height.
-	ch, err := wallet.GetHeight()
+	// Get the current and max block height.
+	s.CurHeight, err = walletHeight()
 	if err != nil {
 		return s, err
 	}
-	mh, err := daemon.GetBlockCount()
+	s.MaxHeight, err = daemonHeight()
 	if err != nil {
 		return s, err
 	}
 
 	// Generate QR image.
-	if _, err := os.Stat(path.Join("static/images/qr", a.Address+
+	if _, err := os.Stat(path.Join("static/images/qr", s.Address+
 		".png")); os.IsNotExist(err) {
-		if err := qrcode.WriteColorFile(a.Address, qrcode.Medium, 226, color.Transparent, color.White,
-			path.Join("static/images/qr", a.Address+".png")); err != nil {
+		if err := qrcode.WriteColorFile(s.Address, qrcode.Medium, 226,
+			color.Transparent, color.White, path.Join("static/images/qr",
+				s.Address+".png")); err != nil {
 			return s, err
 		}
 	}
-
-	s.Balance = float64(b.Balance) / 1.e+12
-	s.UnBalance = float64(b.UnBalance) / 1.e+12
-	s.Address = a.Address
-	s.CurHeight = ch.Height
-	s.MaxHeight = mh.Count
 
 	return s, nil
 }

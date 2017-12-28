@@ -5,3 +5,5 @@
 * Create master handler so not every handler needs to call sidebar(), etc.
 * Test and fix chromium.
 * Use Methods("POST") for settings
+* Consider not using monero library.
+* Use euro format func

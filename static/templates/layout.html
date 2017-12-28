@@ -1,8 +1,40 @@
 <!DOCTYPE html>
 
-<html>
-	{{template "head" .}}
+<head>
+	<title>sako / {{.Template}} [?]</title>
 
+	<link rel="stylesheet" href="/static/css/layout.css">
+	<link rel="stylesheet" href="/static/css/sidebar.css">
+	<link rel="stylesheet" href="/static/css/content.css">
+	<link rel="stylesheet" href="/static/css/{{.Template}}.css">
+
+	<link rel="stylesheet" href="/static/vendor/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/vendor/css/animate.min.css">
+
+	<script src="/static/vendor/js/moment.min.js"></script>
+	<script src="/static/vendor/js/Chart.min.js"></script>
+	<script src="/static/vendor/js/Chart.min.js"></script>
+	<script src="/static/vendor/js/particles.min.js"></script>
+	<script src="/static/vendor/js/animate.css.min.js"></script>
+
+	<script>
+		var ws = new WebSocket("ws://" + window.location.host +
+			"/{{.Template}}-ws");
+		ws.onmessage = function(evt) {
+			var m = JSON.parse(evt.data);
+
+			// Update title to display the current XMR price.
+			document.title = document.title.replace(/\[.*\]/, "[" + m.Symbol +
+				m.Price.toFixed(2) + "]");
+
+			{{template "websocket" .}}
+		}
+
+		{{template "javascript" .}}
+	</script>
+</head>
+
+<html>
 	<body>
 		<div id="sidebar">
 			{{template "sidebar" .}}

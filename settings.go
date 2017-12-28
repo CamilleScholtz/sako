@@ -1,24 +1,17 @@
 package main
 
 import (
-	"html/template"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"os"
-	"path"
 	"regexp"
 )
 
 // TODO: Possibly use an universal model.
 type settingsModel struct {
-	Template      string
-	Sidebar       Sidebar
-	CryptoCompare CryptoCompare
-	Config        Config
+	Template string
+	Sidebar  Sidebar
+	Config   Config
 }
 
-func settings(w http.ResponseWriter, r *http.Request) {
+/*func settings(w http.ResponseWriter, r *http.Request) {
 	// Handle POST requests.
 	if r.Method == http.MethodPost {
 		if err := r.ParseForm(); err != nil {
@@ -74,7 +67,7 @@ func settings(w http.ResponseWriter, r *http.Request) {
 	if err := t.Execute(w, model); err != nil {
 		log.Print(err)
 	}
-}
+}*/
 
 func replaceConfig(f []byte, k, v string) []byte {
 	re := regexp.MustCompile(

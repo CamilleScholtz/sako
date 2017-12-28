@@ -2,23 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"math"
+	"fmt"
 	"net/http"
 	"reflect"
 	"time"
-
-	"github.com/olihawkins/decimals"
 )
-
-// CryptoCompare is a stuct with all CryptoCompare values.
-type CryptoCompare struct {
-	GraphTime  []int     `json:"CryptoCompareGraphTime"`
-	GraphPrice []float64 `json:"CryptoCompareGraphPrice"`
-
-	Price         string `json:"CryptoComparePrice"`
-	ChangePercent string `json:"CryptoCompareChangePercent"`
-	ChangePrice   string `json:"CryptoCompareChangePrice"`
-}
 
 // getAndUnmarshal fetches and parses JSON from a specified URL.
 func getAndUnmarshal(url string, t interface{}) error {
@@ -33,10 +21,7 @@ func getAndUnmarshal(url string, t interface{}) error {
 	return json.NewDecoder(r.Body).Decode(t)
 }
 
-func cryptoCompare() (CryptoCompare, error) {
-	c := CryptoCompare{}
-
-	// Fetch 48 hours of price history.
+func cryptoGraph() ([]int, []float64, error) {
 	var histohour = struct {
 		Data []struct {
 			Close float64 `json:"close"`
@@ -46,50 +31,41 @@ func cryptoCompare() (CryptoCompare, error) {
 	if err := getAndUnmarshal(
 		"https://min-api.cryptocompare.com/data/histohour?fsym=XMR&limit=48&tsym="+
 			config.Currency, &histohour); err != nil {
-		return c, err
+		return []int{}, []float64{}, err
 	}
 
-	// Fetch current price.
+	var t []int
+	var p []float64
+	for _, i := range histohour.Data {
+		t = append(t, i.Time)
+		p = append(p, i.Close)
+	}
+
+	return t, p, nil
+}
+
+func cryptoPrice() (float64, error) {
 	var price = struct {
 		USD float64 `json:"USD"`
 		EUR float64 `json:"EUR"`
 	}{}
 	if err := getAndUnmarshal(
-		"https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms="+
-			config.Currency, &price); err != nil {
-		return c, err
+		"https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms="+config.
+			Currency, &price); err != nil {
+		return 0, err
 	}
 
-	// Write history to CryptoCompare struct.
-	for _, p := range histohour.Data {
-		c.GraphTime = append(c.GraphTime, p.Time)
-		c.GraphPrice = append(c.GraphPrice, p.Close)
-	}
+	return reflect.Indirect(reflect.ValueOf(price)).FieldByName(config.
+		Currency).Float(), nil
+}
 
-	// Refelected value of price, for later usage.
-	p := reflect.Indirect(reflect.ValueOf(price)).FieldByName(
-		config.Currency).Float()
-
-	// Symbol to use.
-	var sym string
+func cryptoSymbol() (string, error) {
 	switch config.Currency {
 	case "EUR":
-		sym = "€"
+		return "€", nil
 	case "USD":
-		sym = "$"
+		return "$", nil
 	}
 
-	// Did the price go up or down?
-	dir := "+"
-	if p < c.GraphPrice[0] {
-		dir = "-"
-	}
-
-	// Write other values to CryptoCompare struct.
-	c.Price = sym + decimals.FormatFloat(p, 2)
-	c.ChangePercent = dir + " " + decimals.FormatFloat(math.Abs(((p/
-		c.GraphPrice[0])-1)*100), 2) + "%"
-	c.ChangePrice = sym + decimals.FormatFloat(math.Abs(p-c.GraphPrice[0]), 2)
-
-	return c, nil
+	return "", fmt.Errorf("cryptoSymbol: No valid currency name")
 }
