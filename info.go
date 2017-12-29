@@ -10,31 +10,17 @@ import (
 	"github.com/olahol/melody"
 )
 
-type infoData struct {
-	Template string
-	Sidebar  Sidebar
-}
-
 func info(w http.ResponseWriter, r *http.Request) {
-	var err error
-
-	d := infoData{Template: "info"}
-	d.Sidebar, err = sidebar()
-	if err != nil {
-		log.Print(err)
-	}
-
 	t, err := template.ParseFiles(
 		"static/templates/layout.html",
 		"static/templates/sidebar.html",
 		"static/templates/info.html",
-		"static/templates/info.js",
 	)
 	if err != nil {
 		log.Print(err)
 	}
 
-	if err := t.Execute(w, d); err != nil {
+	if err := t.Execute(w, "info"); err != nil {
 		log.Print(err)
 	}
 
@@ -46,38 +32,37 @@ func updateInfo(s *melody.Session) {
 		t := time.NewTicker(15 * time.Second)
 		defer t.Stop()
 
+		// TODO: The continue here could result in an endless loop.
 		for {
-			cgt, cgp, err := cryptoGraph()
+			sidebar, err := sidebar()
 			if err != nil {
 				log.Print(err)
-				return
+				continue
 			}
 
-			cs, err := cryptoSymbol()
+			graph, err := cryptoGraph()
 			if err != nil {
 				log.Print(err)
-				return
+				continue
 			}
 
-			cp, err := cryptoPrice()
+			price, err := cryptoPrice()
 			if err != nil {
 				log.Print(err)
-				return
+				continue
 			}
 
 			msg, err := json.Marshal(struct {
-				Symbol     string
-				Price      float64
-				GraphTime  []int
-				GraphPrice []float64
+				Sidebar Sidebar
+				Price   Price
+				Graph   Graph
 			}{
-				cs, cp, cgt, cgp,
+				sidebar, price, graph,
 			})
 			if err != nil {
 				log.Print(err)
-				return
+				continue
 			}
-
 			s.Write(msg)
 
 			<-t.C

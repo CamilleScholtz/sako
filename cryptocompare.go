@@ -5,23 +5,31 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"time"
 )
 
 // getAndUnmarshal fetches and parses JSON from a specified URL.
 func getAndUnmarshal(url string, t interface{}) error {
-	c := &http.Client{Timeout: 10 * time.Second}
-
-	r, err := c.Get(url)
+	r, err := http.Get(url)
 	if err != nil {
 		return err
 	}
 	defer r.Body.Close()
+	if r.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected http GET status: %s", r.Status)
+	}
 
 	return json.NewDecoder(r.Body).Decode(t)
 }
 
-func cryptoGraph() ([]int, []float64, error) {
+// Graph is a stuct with all the values needed for a graph.
+type Graph struct {
+	Time  []int
+	Value []float64
+}
+
+func cryptoGraph() (Graph, error) {
+	c := Graph{}
+
 	var histohour = struct {
 		Data []struct {
 			Close float64 `json:"close"`
@@ -31,20 +39,26 @@ func cryptoGraph() ([]int, []float64, error) {
 	if err := getAndUnmarshal(
 		"https://min-api.cryptocompare.com/data/histohour?fsym=XMR&limit=48&tsym="+
 			config.Currency, &histohour); err != nil {
-		return []int{}, []float64{}, err
+		return c, err
 	}
 
-	var t []int
-	var p []float64
 	for _, i := range histohour.Data {
-		t = append(t, i.Time)
-		p = append(p, i.Close)
+		c.Time = append(c.Time, i.Time)
+		c.Value = append(c.Value, i.Close)
 	}
 
-	return t, p, nil
+	return c, nil
 }
 
-func cryptoPrice() (float64, error) {
+// Price is a stuct with all the values needed for a price.
+type Price struct {
+	Symbol string
+	Value  float64
+}
+
+func cryptoPrice() (Price, error) {
+	p := Price{}
+
 	var price = struct {
 		USD float64 `json:"USD"`
 		EUR float64 `json:"EUR"`
@@ -52,20 +66,17 @@ func cryptoPrice() (float64, error) {
 	if err := getAndUnmarshal(
 		"https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms="+config.
 			Currency, &price); err != nil {
-		return 0, err
+		return p, err
 	}
 
-	return reflect.Indirect(reflect.ValueOf(price)).FieldByName(config.
-		Currency).Float(), nil
-}
-
-func cryptoSymbol() (string, error) {
 	switch config.Currency {
 	case "EUR":
-		return "€", nil
+		p.Symbol = "€"
 	case "USD":
-		return "$", nil
+		p.Symbol = "$"
 	}
+	p.Value = reflect.Indirect(reflect.ValueOf(price)).FieldByName(config.
+		Currency).Float()
 
-	return "", fmt.Errorf("cryptoSymbol: No valid currency name")
+	return p, nil
 }
