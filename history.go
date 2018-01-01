@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/olahol/melody"
-	"github.com/sunrisedo/monero"
 )
 
 func history(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +32,6 @@ func historyInfo(s *melody.Session) {
 		t := time.NewTicker(15 * time.Second)
 		defer t.Stop()
 
-		// TODO: The continue here could result in an endless loop.
 		for {
 			sidebar, err := sidebar()
 			if err != nil {
@@ -53,19 +51,19 @@ func historyInfo(s *melody.Session) {
 				return
 			}
 
-			transactions, err := walletTransactions()
+			transfers, err := walletIncomingTransfers()
 			if err != nil {
 				log.Print(err)
 				return
 			}
 
 			msg, err := json.Marshal(struct {
-				Sidebar      Sidebar
-				Price        Price
-				Graph        Graph
-				Transactions monero.Transfer
+				Sidebar   Sidebar
+				Price     Price
+				Graph     Graph
+				Transfers uint64
 			}{
-				sidebar, price, graph, transactions,
+				sidebar, price, graph, transfers,
 			})
 			if err != nil {
 				log.Print(err)

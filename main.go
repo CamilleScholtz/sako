@@ -10,22 +10,15 @@ import (
 	"github.com/sunrisedo/monero"
 )
 
-var (
-	daemon *monero.DaemonClient
-	wallet *monero.WalletClient
-
-	mel = melody.New()
-)
+var daemon *monero.DaemonClient
+var mel = melody.New()
 
 func main() {
 	if err := parseConfig(); err != nil {
 		log.Fatal(err)
 	}
 
-	// Listen to the Monero deamon and wallet.
 	daemon = monero.NewDaemonClient("http://" + config.Daemon + "/json_rpc")
-	wallet = monero.NewWalletClient("http://"+config.RPC+"/json_rpc",
-		config.Username, config.Password)
 
 	r := mux.NewRouter()
 

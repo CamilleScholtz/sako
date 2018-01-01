@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/onodera-punpun/sako/digest"
-	"github.com/sunrisedo/monero"
 )
 
 // Request represents a JSON-RPC request sent by a client.
@@ -38,13 +37,13 @@ type Response struct {
 
 // encodeClientRequest encodes struff for a JSON-RPC client request.
 func encodeRequest(m string, p interface{}) *bytes.Reader {
-	c := &Request{
+	r := &Request{
 		Version: "2.0",
 		Method:  m,
 		Params:  p,
 		ID:      uint64(rand.Int63()),
 	}
-	d, _ := json.Marshal(c)
+	d, _ := json.Marshal(r)
 
 	return bytes.NewReader(d)
 }
@@ -68,11 +67,11 @@ func decodeResponse(r io.Reader, t interface{}) error {
 
 // walletRequest requests and parses JSON from the Monero wallet RPC client into
 // a specified interface.
-func walletRequest(m string, t interface{}) error {
+func walletRequest(m string, p, t interface{}) error {
 	c := &http.Client{Timeout: time.Second * 5}
 
 	req, err := http.NewRequest("POST", "http://"+config.RPC+"/json_rpc",
-		encodeRequest(m, nil))
+		encodeRequest(m, p))
 	if err != nil {
 		return err
 	}
@@ -96,12 +95,14 @@ func walletRequest(m string, t interface{}) error {
 }
 
 func walletAddress() (string, error) {
-	v, err := wallet.GetAddress()
-	if err != nil {
+	var t = struct {
+		Address string `json:"address"`
+	}{}
+	if err := walletRequest("getaddress", nil, &t); err != nil {
 		return "", err
 	}
 
-	return v.Address, nil
+	return t.Address, nil
 }
 
 func walletBalance() (float64, float64, error) {
@@ -109,7 +110,7 @@ func walletBalance() (float64, float64, error) {
 		Balance   uint64 `json:"balance"`
 		UnBalance uint64 `json:"unlocked_balance"`
 	}{}
-	if err := walletRequest("getbalance", &t); err != nil {
+	if err := walletRequest("getbalance", nil, &t); err != nil {
 		return 0, 0, err
 	}
 
@@ -117,20 +118,33 @@ func walletBalance() (float64, float64, error) {
 }
 
 func walletHeight() (int64, error) {
-	v, err := wallet.GetHeight()
-	if err != nil {
+	var t = struct {
+		Height int64 `json:"height"`
+	}{}
+	if err := walletRequest("getheight", nil, &t); err != nil {
 		return 0, err
 	}
 
-	return v.Height, nil
+	return t.Height, nil
 }
 
-func walletTransactions() (monero.Transfer, error) {
-	v, err := wallet.IncomingTransfers("all")
-	if err != nil {
-		return monero.Transfer{}, err
+func walletIncomingTransfers() (uint64, error) {
+	var t = struct {
+		Transfers []struct {
+			Amount      uint64 `json:"amount"`
+			GlobalIndex int    `json:"global_index"`
+			Spent       bool   `json:"spent"`
+			TxHash      string `json:"tx_hash"`
+			TxSize      int    `json:"tx_size"`
+		} `json:"transfers"`
+	}{}
+	if err := walletRequest("incoming_transfers", struct {
+		TransferType string `json:"transfer_type"`
+	}{
+		"all",
+	}, &t); err != nil {
+		return 0, err
 	}
-	fmt.Println(v)
 
-	return v, nil
+	return t.Transfers[0].Amount, nil
 }

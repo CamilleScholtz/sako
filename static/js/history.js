@@ -7,7 +7,7 @@ ws.addEventListener('message', function(evt) {
 		return;
 	}
 
-	console.log(m.Transactions);
+	console.log(m.Transfers);
 
 	// Update title to display the current XMR value.
 	document.title = document.title.replace(/.[0-9]+\.[0-9]+|\?/,
