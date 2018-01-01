@@ -5,30 +5,44 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"time"
 )
 
-// getAndUnmarshal fetches and parses JSON from a specified URL.
-func getAndUnmarshal(url string, t interface{}) error {
-	r, err := http.Get(url)
+// cryptoCompareRequest requests and parses JSON from a specified URL into a
+// specified interface.
+func cryptoCompareRequest(url string, t interface{}) error {
+	c := &http.Client{Timeout: time.Second * 5}
+
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
 	}
-	defer r.Body.Close()
-	if r.StatusCode != http.StatusOK {
-		return fmt.Errorf("unexpected http GET status: %s", r.Status)
+	req.Header.Set("Content-Type", "application/json")
+
+	res, err := c.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("request: Returned invalid statuscode %d",
+			res.StatusCode)
 	}
 
-	return json.NewDecoder(r.Body).Decode(t)
+	return json.NewDecoder(res.Body).Decode(t)
 }
 
-// Graph is a stuct with all the values needed for a graph.
+// Graph represents some of the values found in a CryptoCompare
+// `/data/histohour` response.
 type Graph struct {
 	Time  []int
 	Value []float64
 }
 
-func cryptoGraph() (Graph, error) {
-	c := Graph{}
+// cryptoCompareGraph request and returns graphing information from the
+// CryptoCompare API.
+func cryptoCompareGraph() (Graph, error) {
+	g := Graph{}
 
 	var histohour = struct {
 		Data []struct {
@@ -36,34 +50,37 @@ func cryptoGraph() (Graph, error) {
 			Time  int     `json:"time"`
 		} `json:"Data"`
 	}{}
-	if err := getAndUnmarshal(
+	if err := cryptoCompareRequest(
 		"https://min-api.cryptocompare.com/data/histohour?fsym=XMR&limit=48&tsym="+
 			config.Currency, &histohour); err != nil {
-		return c, err
+		return g, err
 	}
 
 	for _, i := range histohour.Data {
-		c.Time = append(c.Time, i.Time)
-		c.Value = append(c.Value, i.Close)
+		g.Time = append(g.Time, i.Time)
+		g.Value = append(g.Value, i.Close)
 	}
 
-	return c, nil
+	return g, nil
 }
 
-// Price is a stuct with all the values needed for a price.
+// Price represents some of the values found in a CryptoCompare `/data/price`
+// response. It also includes a currency symbol.
 type Price struct {
 	Symbol string
 	Value  float64
 }
 
-func cryptoPrice() (Price, error) {
+// cryptoComparePrice request and returns price information from the
+// CryptoCompare API.
+func cryptoComparePrice() (Price, error) {
 	p := Price{}
 
 	var price = struct {
 		USD float64 `json:"USD"`
 		EUR float64 `json:"EUR"`
 	}{}
-	if err := getAndUnmarshal(
+	if err := cryptoCompareRequest(
 		"https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms="+config.
 			Currency, &price); err != nil {
 		return p, err

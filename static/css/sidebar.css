@@ -29,6 +29,7 @@
 }
 
 #sidebar #particles-container {
+	border-radius: 10px;
 	height: 215px;
 	overflow: hidden;
 	position: relative;
@@ -157,7 +158,7 @@
 #sidebar meter {
 	background: none;
 	border: 3px solid rgba(255, 206, 86, 1);
-	border-radius: 12px;
+	border-radius: 10px;
 	height: 14px;
 	width: 100%;
 }

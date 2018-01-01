@@ -35,6 +35,11 @@ func main() {
 		mel.HandleRequest(w, r)
 	})
 
+	r.HandleFunc("/history", history)
+	r.HandleFunc("/history-ws", func(w http.ResponseWriter, r *http.Request) {
+		mel.HandleRequest(w, r)
+	})
+
 	//r.HandleFunc("/settings", settings)
 	//r.HandleFunc("/settings-ws", func(w http.ResponseWriter, r *http.Request) {
 	//	m.HandleRequest(w, r)
