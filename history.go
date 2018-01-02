@@ -39,12 +39,6 @@ func historyInfo(s *melody.Session) {
 				return
 			}
 
-			graph, err := cryptoCompareGraph()
-			if err != nil {
-				log.Print(err)
-				return
-			}
-
 			price, err := cryptoComparePrice()
 			if err != nil {
 				log.Print(err)
@@ -60,10 +54,9 @@ func historyInfo(s *melody.Session) {
 			msg, err := json.Marshal(struct {
 				Sidebar   Sidebar
 				Price     Price
-				Graph     Graph
-				Transfers uint64
+				Transfers []Transfer
 			}{
-				sidebar, price, graph, transfers,
+				sidebar, price, transfers,
 			})
 			if err != nil {
 				log.Print(err)

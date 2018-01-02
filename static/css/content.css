@@ -14,10 +14,10 @@
 
 #content .text-green {
 	color: #4BC0C0;
-	text-shadow: 0px 1px 13px rgba(75, 192, 192, 0.5);
+	text-shadow: 0px 1px 13px rgba(75, 192, 192, 0.6);
 }
 
 #content .text-red {
 	color: #F27173;
-	text-shadow: 0px 1px 13px rgba(242, 113, 115, 0.5);
+	text-shadow: 0px 1px 13px rgba(242, 113, 115, 0.6);
 }

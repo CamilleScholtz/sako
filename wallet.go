@@ -56,6 +56,7 @@ func decodeResponse(r io.Reader, t interface{}) error {
 	}
 
 	if res.Error != nil {
+		// TODO: Read out error.
 		return fmt.Errorf("decode: Result is an error")
 	}
 	if res.Result == nil {
@@ -86,6 +87,7 @@ func walletRequest(m string, p, t interface{}) error {
 		return err
 	}
 	defer res.Body.Close()
+	// TODO: It way too often returns 401.
 	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("request: Returned invalid statuscode %d",
 			res.StatusCode)
@@ -105,16 +107,25 @@ func walletAddress() (string, error) {
 	return t.Address, nil
 }
 
-func walletBalance() (float64, float64, error) {
+// Balance represents the values returned by `getbalance`.
+type Balance struct {
+	Balance   float64
+	UnBalance float64
+}
+
+func walletBalance() (Balance, error) {
 	var t = struct {
 		Balance   uint64 `json:"balance"`
 		UnBalance uint64 `json:"unlocked_balance"`
 	}{}
 	if err := walletRequest("getbalance", nil, &t); err != nil {
-		return 0, 0, err
+		return Balance{}, err
 	}
 
-	return float64(t.Balance) / 1.e+12, float64(t.UnBalance) / 1.e+12, nil
+	return Balance{
+		float64(t.Balance) / 1.e+12,
+		float64(t.UnBalance) / 1.e+12,
+	}, nil
 }
 
 func walletHeight() (int64, error) {
@@ -128,7 +139,12 @@ func walletHeight() (int64, error) {
 	return t.Height, nil
 }
 
-func walletIncomingTransfers() (uint64, error) {
+// Transfer represents the values returned by `incoming_transfers`.
+type Transfer struct {
+	Amount float64
+}
+
+func walletIncomingTransfers() ([]Transfer, error) {
 	var t = struct {
 		Transfers []struct {
 			Amount      uint64 `json:"amount"`
@@ -143,8 +159,15 @@ func walletIncomingTransfers() (uint64, error) {
 	}{
 		"all",
 	}, &t); err != nil {
-		return 0, err
+		return []Transfer{}, err
 	}
 
-	return t.Transfers[0].Amount, nil
+	var tr []Transfer
+	for _, p := range t.Transfers {
+		tr = append(tr, Transfer{
+			float64(p.Amount) / 1.e+12,
+		})
+	}
+
+	return tr, nil
 }

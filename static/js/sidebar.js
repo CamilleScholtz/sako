@@ -2,12 +2,13 @@ ws.addEventListener('message', function(evt) {
 	var m = JSON.parse(evt.data);
 
 	// Stop if the wallet balance didn't change.
-	if (document.getElementById("unbalance").innerHTML == m.Sidebar.UnBalance) {
+	if (document.getElementById("unbalance").innerHTML ==
+		m.Sidebar.Balance.Balance) {
 		return;
 	}
 
-	document.getElementById("balance").innerHTML = m.Sidebar.Balance;
-	document.getElementById("unbalance").innerHTML = m.Sidebar.UnBalance;
+	document.getElementById("balance").innerHTML = m.Sidebar.Balance.Balance;
+	document.getElementById("unbalance").innerHTML = m.Sidebar.Balance.UnBalance;
 	document.getElementById("address").innerHTML = m.Sidebar.Address;
 	document.getElementById("qr").src = "/static/images/qr/" +
 		m.Sidebar.Address + ".png";

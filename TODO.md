@@ -1,9 +1,7 @@
 # TODO
 
-* Use global javascript for things such as the title.
-* Figure out how to use WebSockets for multiple pages.
+* Use a global javascript for things such as the title.
 * Create master handler so not every handler needs to call sidebar(), etc.
 * Test and fix chromium.
-* Use Methods("POST") for settings
-* Consider not using monero library.
-* Use euro format func
+* Consider making a monero-RPC library.
+* Add shitty loading overlay on load :^).

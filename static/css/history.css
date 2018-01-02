@@ -1,19 +1,4 @@
-#content #background {
-	position: absolute;
-	top: 150px;
-	width: 100%;
+#content .transfer {
+	border-top: 1px solid #F0F1F2;
+	height: 40px;
 }
-
-#content #graph {
-	max-height: 200px;
-}
-
-#content #gradient {
-	background: #FFFEFC;;
-	height: calc(100vh - 510px);
-}
-
-#content {
-	background: linear-gradient(to bottom, rgba(255, 206, 86, 0.05) 0%, rgba(255, 206, 86, 0.2) 20%);
-}
-

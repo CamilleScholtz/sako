@@ -11,8 +11,7 @@ import (
 
 // Sidebar is a stuct with all the values needed in the sidebar templates.
 type Sidebar struct {
-	Balance   float64
-	UnBalance float64
+	Balance   Balance
 	Address   string
 	CurHeight int64
 	MaxHeight int
@@ -20,7 +19,7 @@ type Sidebar struct {
 
 func sidebar() (s Sidebar, err error) {
 	// Get wallet balance.
-	s.Balance, s.UnBalance, err = walletBalance()
+	s.Balance, err = walletBalance()
 	if err != nil {
 		return s, err
 	}
