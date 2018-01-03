@@ -2,14 +2,14 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"math/rand"
 	"net/http"
-	"time"
 
-	"github.com/onodera-punpun/sako/digest"
+	digest "github.com/delphinus/go-digest-request"
 )
 
 // Request represents a JSON-RPC request sent by a client.
@@ -69,7 +69,7 @@ func decodeResponse(r io.Reader, t interface{}) error {
 // walletRequest requests and parses JSON from the Monero wallet RPC client into
 // a specified interface.
 func walletRequest(m string, p, t interface{}) error {
-	c := &http.Client{Timeout: time.Second * 5}
+	c := digest.New(context.Background(), config.Username, config.Password)
 
 	req, err := http.NewRequest("POST", "http://"+config.RPC+"/json_rpc",
 		encodeRequest(m, p))
@@ -77,17 +77,12 @@ func walletRequest(m string, p, t interface{}) error {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	if err := digest.ApplyAuth(c, config.Username, config.Password,
-		req); err != nil {
-		return err
-	}
 
 	res, err := c.Do(req)
 	if err != nil {
 		return err
 	}
 	defer res.Body.Close()
-	// TODO: It way too often returns 401.
 	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("request: Returned invalid statuscode %d",
 			res.StatusCode)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-	<title>sako / {{.}} [?]</title>
+	<title>sako / {{.Template}} [?]</title>
 
 	<link rel="stylesheet" href="/static/vendor/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/static/vendor/css/animate.min.css">
@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="/static/css/layout.css">
 	<link rel="stylesheet" href="/static/css/sidebar.css">
 	<link rel="stylesheet" href="/static/css/content.css">
-	<link rel="stylesheet" href="/static/css/{{.}}.css">
+	<link rel="stylesheet" href="/static/css/{{.Template}}.css">
 
 	<script src="/static/vendor/js/moment.min.js"></script>
 	<script src="/static/vendor/js/Chart.min.js"></script>
@@ -17,9 +17,9 @@
 	<script src="/static/vendor/js/particles.min.js"></script>
 	<script src="/static/vendor/js/animate.css.min.js"></script>
 
-	<script>var ws = new WebSocket("ws://" + window.location.host + "/{{.}}-ws");</script>
+	<script>var ws = new WebSocket("ws://" + window.location.host + "/{{.Template}}-ws");</script>
 	<script src="/static/js/sidebar.js"></script>
-	<script src="/static/js/{{.}}.js"></script>
+	<script src="/static/js/{{.Template}}.js"></script>
 </head>
 
 <html>

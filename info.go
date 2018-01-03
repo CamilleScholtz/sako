@@ -20,7 +20,18 @@ func info(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	if err := t.Execute(w, "info"); err != nil {
+	sidebar, err := sidebar()
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	if err := t.Execute(w, struct {
+		Template string
+		Sidebar  Sidebar
+	}{
+		"info", sidebar,
+	}); err != nil {
 		log.Print(err)
 	}
 
@@ -33,12 +44,6 @@ func updateInfo(s *melody.Session) {
 		defer t.Stop()
 
 		for {
-			sidebar, err := sidebar()
-			if err != nil {
-				log.Print(err)
-				return
-			}
-
 			graph, err := cryptoCompareGraph()
 			if err != nil {
 				log.Print(err)
@@ -52,11 +57,10 @@ func updateInfo(s *melody.Session) {
 			}
 
 			msg, err := json.Marshal(struct {
-				Sidebar Sidebar
-				Price   Price
-				Graph   Graph
+				Price Price
+				Graph Graph
 			}{
-				sidebar, price, graph,
+				price, graph,
 			})
 			if err != nil {
 				log.Print(err)
