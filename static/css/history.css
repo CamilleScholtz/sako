@@ -1,4 +1,7 @@
 #content .transfer {
 	border-top: 1px solid #F0F1F2;
-	height: 40px;
+}
+
+#content .amount {
+	font-size: 32px;
 }

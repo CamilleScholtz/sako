@@ -14,7 +14,7 @@
 }
 
 #content {
-	background: linear-gradient(to bottom, rgba(255, 206, 86, 0.05) 0%, rgba(255, 206, 86, 0.2) 20%);
+	background: linear-gradient(to bottom, #FFFDF9 0%, #FFFAEE 20%);
 }
 
 #content #price-container {

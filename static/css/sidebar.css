@@ -28,14 +28,14 @@
 
 }
 
-#sidebar #particles-container {
+#sidebar #particles-card-container {
 	border-radius: 10px;
 	height: 215px;
 	overflow: hidden;
 	position: relative;
 }
 
-#sidebar #particles {
+#sidebar #particles-card {
 	height: calc(100% + 128px);
 	margin-left: -64px;
 	margin-top: -64px;
