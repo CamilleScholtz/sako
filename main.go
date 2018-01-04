@@ -7,10 +7,12 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/olahol/melody"
-	"github.com/sunrisedo/monero"
+	"github.com/onodera-punpun/sako/monero"
+	oldMonero "github.com/sunrisedo/monero"
 )
 
-var daemon *monero.DaemonClient
+var wallet *monero.Wallet
+var daemon *oldMonero.DaemonClient
 var mel = melody.New()
 
 func main() {
@@ -18,7 +20,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	daemon = monero.NewDaemonClient("http://" + config.Daemon + "/json_rpc")
+	wallet = monero.NewWallet("http://"+config.RPC+"/json_rpc",
+		config.Username, config.Password)
+	daemon = oldMonero.NewDaemonClient("http://" + config.Daemon + "/json_rpc")
 
 	r := mux.NewRouter()
 

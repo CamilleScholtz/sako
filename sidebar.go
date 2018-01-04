@@ -6,12 +6,13 @@ import (
 
 	"image/color"
 
+	"github.com/onodera-punpun/sako/monero"
 	qrcode "github.com/skip2/go-qrcode"
 )
 
 // Sidebar is a stuct with all the values needed in the sidebar templates.
 type Sidebar struct {
-	Balance   Balance
+	Balance   monero.Balance
 	Address   string
 	CurHeight int64
 	MaxHeight int
@@ -19,19 +20,19 @@ type Sidebar struct {
 
 func sidebar() (s Sidebar, err error) {
 	// Get wallet balance.
-	s.Balance, err = walletBalance()
+	s.Balance, err = wallet.Balance()
 	if err != nil {
 		return s, err
 	}
 
 	// Get wallet address.
-	s.Address, err = walletAddress()
+	s.Address, err = wallet.Address()
 	if err != nil {
 		return s, err
 	}
 
 	// Get the current and max block height.
-	s.CurHeight, err = walletHeight()
+	s.CurHeight, err = wallet.Height()
 	if err != nil {
 		return s, err
 	}

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/olahol/melody"
+	"github.com/onodera-punpun/sako/monero"
 )
 
 func history(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +21,29 @@ func history(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	if err := t.Execute(w, "history"); err != nil {
+	sidebar, err := sidebar()
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	reverseTransfers, err := wallet.IncomingTransfers()
+	if err != nil {
+		log.Print(err)
+		return
+	}
+	var transfers []monero.Transfer
+	for i := len(reverseTransfers) - 1; i >= 0; i-- {
+		transfers = append(transfers, reverseTransfers[i])
+	}
+
+	if err := t.Execute(w, struct {
+		Template  string
+		Sidebar   Sidebar
+		Transfers []monero.Transfer
+	}{
+		"history", sidebar, transfers,
+	}); err != nil {
 		log.Print(err)
 	}
 
@@ -33,30 +56,16 @@ func historyInfo(s *melody.Session) {
 		defer t.Stop()
 
 		for {
-			sidebar, err := sidebar()
-			if err != nil {
-				log.Print(err)
-				return
-			}
-
 			price, err := cryptoComparePrice()
 			if err != nil {
 				log.Print(err)
 				return
 			}
 
-			transfers, err := walletIncomingTransfers()
-			if err != nil {
-				log.Print(err)
-				return
-			}
-
 			msg, err := json.Marshal(struct {
-				Sidebar   Sidebar
-				Price     Price
-				Transfers []Transfer
+				Price Price
 			}{
-				sidebar, price, transfers,
+				price,
 			})
 			if err != nil {
 				log.Print(err)

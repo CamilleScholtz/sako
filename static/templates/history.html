@@ -1,3 +1,13 @@
 {{define "content"}}
 
+<div id="transfers">
+	{{range .Transfers}}
+		<div id="transfer">
+			<h1 id="amount">{{.Amount}}</h1>
+			<span id="size">{{.Size}} kB</span>
+			<span id="hash">{{.Hash}}</span>
+		</div>
+	{{end}}
+</div>
+
 {{end}}
