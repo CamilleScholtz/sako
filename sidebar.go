@@ -18,7 +18,7 @@ type Sidebar struct {
 	Balance   monero.Balance
 	Address   string
 	CurHeight int64
-	MaxHeight int
+	MaxHeight int64
 }
 
 func updateSidebar(s *melody.Session) (err error) {
@@ -43,7 +43,7 @@ func updateSidebar(s *melody.Session) (err error) {
 	if err != nil {
 		return err
 	}
-	sb.MaxHeight, err = daemonHeight()
+	sb.MaxHeight, err = daemon.Height()
 	if err != nil {
 		return err
 	}
