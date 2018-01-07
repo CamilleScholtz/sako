@@ -18,14 +18,13 @@
 #sidebar #card {
 	background: linear-gradient(156deg, #1F5887 0%, #425989 55%, #3D547C 56%, #425989 100%);
 	border-radius: 10px;
-	box-shadow: 0px 3px 80px -15px rgba(54, 163, 235, 0.5),
+	box-shadow: 0px 3px 50px -15px rgba(54, 163, 235, 0.5),
 		0px 2px 20px -5px rgba(36, 55, 75, 0.4);
 	height: 215px;
 	margin: 45px 25px 65px 25px;
 	position: relative;
 	transform-style: preserve-3d;
 	transition: 0.6s 0.2s;
-
 }
 
 #sidebar #particles-card-container {
@@ -131,7 +130,7 @@
 }
 
 #sidebar ul li:hover {
-	border-left: 3px solid rgba(54, 163, 235, 1);
+	border-left: 3px solid #36A2EB;
 	box-shadow: inset 0px 1px 66px -37px rgba(54, 163, 235, 0.4);
 	transition: 0.1s;
 }
@@ -146,25 +145,15 @@
 }
 
 
-/* Height meter */
+/* Sync spinner */
 
-#sidebar #height {
-	bottom: 100px;
+#sidebar #sync {
+	bottom: 105px;
 	margin-left: 20px;
 	position: absolute;
-	width: 342px;
+	width: 339px;
 }
 
-#sidebar meter {
-	background: none;
-	border: 3px solid rgba(255, 206, 86, 1);
-	border-radius: 10px;
-	height: 14px;
-	width: 100%;
-}
-
-#sidebar meter::-moz-meter-bar {
-	background: none;
-	box-shadow: inset 0px 0px 10px rgba(255, 206, 86, 0.75),
-		0px 1px 66px -37px rgba(255, 206, 86, 0.4);
+#sidebar .fa-spin {
+	font-size: 28px;
 }

@@ -8,15 +8,6 @@
 	font-family: "avenir heavy", sans serif;
 }
 
-#particles-background {
-	height: 100%;
-	left: 0;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: -1;
-}
-
 body {
 	background: #FFFEFC;
 	height: calc(100vh - 160px);
@@ -26,6 +17,6 @@ body {
 #sidebar, #content {
 	background: #FFFEFC;
 	border-radius: 12px;
-	box-shadow: 0px 4px 96px -47px rgba(64, 173, 245, 0.5);
+	box-shadow: 0px 8px 96px -47px rgba(64, 173, 245, 0.9);
 	height: 100%;
 }

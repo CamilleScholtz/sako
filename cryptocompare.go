@@ -17,7 +17,10 @@ func cryptoCompareRequest(url string, t interface{}) error {
 	if err != nil {
 		return err
 	}
+	// TODO: Use this?
+	//req.Header.Set("Connection", "Keep-Alive")
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
 
 	res, err := c.Do(req)
 	if err != nil {

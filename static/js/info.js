@@ -1,7 +1,10 @@
 ws.addEventListener('message', function(evt) {
 	var m = JSON.parse(evt.data);
+	if (m.Type != "info") {
+		return;
+	}
 
-	// Stop if the XMR value didn't change.
+	// Stop if the current XMR value didn't change.
 	if (document.title.match(/.[0-9]+\.[0-9]+|\?/) == m.Price.Symbol +
 		m.Price.Value.toFixed(2)) {
 		return;
@@ -43,6 +46,12 @@ ws.addEventListener('message', function(evt) {
 		document.getElementById("change").innerHTML = dir + " "  +
 			changePercent + "% (" + m.Price.Symbol + changePrice + ")";
 	});
+
+	// Fill feed with info.
+	//m.Feed.forEach(function(item) {
+	//	document.getElementById("feed").innerHTML += "<a href=\"" + item.Link +
+	//		"\" target=\"_blank\">" + item.Title + "</br>";
+	//});
 });
 
 window.onload = function() {

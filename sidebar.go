@@ -1,55 +1,68 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"path"
 
 	"image/color"
 
+	"github.com/olahol/melody"
 	"github.com/onodera-punpun/sako/monero"
 	qrcode "github.com/skip2/go-qrcode"
 )
 
 // Sidebar is a stuct with all the values needed in the sidebar templates.
 type Sidebar struct {
+	Type      string
 	Balance   monero.Balance
 	Address   string
 	CurHeight int64
 	MaxHeight int
 }
 
-func sidebar() (s Sidebar, err error) {
+func updateSidebar(s *melody.Session) (err error) {
+	sb := Sidebar{Type: "sidebar"}
+
 	// Get wallet balance.
-	s.Balance, err = wallet.Balance()
+	sb.Balance, err = wallet.Balance()
 	if err != nil {
-		return s, err
+		return err
 	}
 
 	// Get wallet address.
-	s.Address, err = wallet.Address()
+	sb.Address, err = wallet.Address()
 	if err != nil {
-		return s, err
+		return err
 	}
 
 	// Get the current and max block height.
-	s.CurHeight, err = wallet.Height()
+	// TODO: Can I use this this to increase load times, as in compare the two
+	// and return if they are not equal?
+	sb.CurHeight, err = wallet.Height()
 	if err != nil {
-		return s, err
+		return err
 	}
-	s.MaxHeight, err = daemonHeight()
+	sb.MaxHeight, err = daemonHeight()
 	if err != nil {
-		return s, err
+		return err
 	}
 
-	// Generate QR image.
-	if _, err := os.Stat(path.Join("static/images/qr", s.Address+
+	// Generate QR image if required.
+	if _, err := os.Stat(path.Join("static/images/qr", sb.Address+
 		".png")); os.IsNotExist(err) {
-		if err := qrcode.WriteColorFile(s.Address, qrcode.Medium, 226,
+		if err := qrcode.WriteColorFile(sb.Address, qrcode.Medium, 226,
 			color.Transparent, color.White, path.Join("static/images/qr",
-				s.Address+".png")); err != nil {
-			return s, err
+				sb.Address+".png")); err != nil {
+			return err
 		}
 	}
 
-	return s, nil
+	msg, err := json.Marshal(sb)
+	if err != nil {
+		return err
+	}
+	s.Write(msg)
+
+	return nil
 }

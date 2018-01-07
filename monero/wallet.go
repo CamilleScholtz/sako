@@ -44,7 +44,7 @@ type request struct {
 }
 
 // encodeClientRequest encodes struff for a JSON-RPC client request.
-func encodeRequest(m string, p interface{}) *bytes.Reader {
+func encodeRequest(m string, p interface{}) []byte {
 	r := &request{
 		Version: "2.0",
 		Method:  m,
@@ -53,7 +53,7 @@ func encodeRequest(m string, p interface{}) *bytes.Reader {
 	}
 	d, _ := json.Marshal(r)
 
-	return bytes.NewReader(d)
+	return d
 }
 
 // response represents a JSON-RPC response returned to a client.
@@ -85,12 +85,15 @@ func decodeResponse(r io.Reader, t interface{}) error {
 // specified interface.
 func (w *Wallet) request(m string, p, t interface{}) error {
 	c := digest.New(context.Background(), w.Username, w.Password)
+	d := encodeRequest(m, p)
 
-	req, err := http.NewRequest("POST", w.URL, encodeRequest(m, p))
+	req, err := http.NewRequest("POST", w.URL, bytes.NewBuffer(d))
 	if err != nil {
 		return err
 	}
+	req.Header.Set("Content-Length", (string)(len(d)))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
 
 	res, err := c.Do(req)
 	if err != nil {

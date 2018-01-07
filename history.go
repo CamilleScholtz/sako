@@ -21,59 +21,76 @@ func history(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	sidebar, err := sidebar()
-	if err != nil {
-		log.Print(err)
-		return
-	}
-
-	reverseTransfers, err := wallet.IncomingTransfers()
-	if err != nil {
-		log.Print(err)
-		return
-	}
-	var transfers []monero.Transfer
-	for i := len(reverseTransfers) - 1; i >= 0; i-- {
-		transfers = append(transfers, reverseTransfers[i])
-	}
-
-	if err := t.Execute(w, struct {
-		Template  string
-		Sidebar   Sidebar
-		Transfers []monero.Transfer
-	}{
-		"history", sidebar, transfers,
-	}); err != nil {
+	if err := t.Execute(w, "history"); err != nil {
 		log.Print(err)
 	}
 
-	mel.HandleConnect(historyInfo)
+	mel.HandleConnect(handleConnectHistory)
 }
 
-func historyInfo(s *melody.Session) {
+func updateHistory(s *melody.Session) error {
+	price, err := cryptoComparePrice()
+	if err != nil {
+		return err
+	}
+
+	rt, err := wallet.IncomingTransfers()
+	if err != nil {
+		return err
+	}
+	var transfers []monero.Transfer
+	for i := len(rt) - 1; i >= 0; i-- {
+		transfers = append(transfers, rt[i])
+	}
+
+	msg, err := json.Marshal(struct {
+		Type      string
+		Price     Price
+		Transfers []monero.Transfer
+	}{
+		"history", price, transfers,
+	})
+	if err != nil {
+		return err
+	}
+	s.Write(msg)
+
+	return nil
+}
+
+func handleConnectHistory(s *melody.Session) {
+	defer s.Close()
+
+	if err := updateSidebar(s); err != nil {
+		log.Println(err)
+		return
+	}
+	if err := updateHistory(s); err != nil {
+		log.Println(err)
+		return
+	}
+
 	go func() {
-		t := time.NewTicker(15 * time.Second)
-		defer t.Stop()
+		fastTicker := time.NewTicker(5 * time.Second)
+		slowTicker := time.NewTicker(20 * time.Second)
+		defer func() {
+			fastTicker.Stop()
+			slowTicker.Stop()
+		}()
 
 		for {
-			price, err := cryptoComparePrice()
-			if err != nil {
-				log.Print(err)
-				return
+			select {
+			case <-fastTicker.C:
+				if err := updateSidebar(s); err != nil {
+					log.Println(err)
+					return
+				}
+			case <-slowTicker.C:
+				if err := updateHistory(s); err != nil {
+					log.Println(err)
+					return
+				}
 			}
-
-			msg, err := json.Marshal(struct {
-				Price Price
-			}{
-				price,
-			})
-			if err != nil {
-				log.Print(err)
-				continue
-			}
-			s.Write(msg)
-
-			<-t.C
 		}
 	}()
 }

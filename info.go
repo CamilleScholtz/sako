@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/olahol/melody"
+	rss "github.com/ungerik/go-rss"
 )
 
 func info(w http.ResponseWriter, r *http.Request) {
@@ -20,55 +21,78 @@ func info(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	sidebar, err := sidebar()
-	if err != nil {
+	if err := t.Execute(w, "info"); err != nil {
 		log.Print(err)
+	}
+
+	mel.HandleConnect(handleConnectInfo)
+}
+
+func updateInfo(s *melody.Session) error {
+	graph, err := cryptoCompareGraph()
+	if err != nil {
+		return err
+	}
+
+	price, err := cryptoComparePrice()
+	if err != nil {
+		return err
+	}
+
+	feed, err := rss.Read("http://monero-observer.com/feed.rss")
+	if err != nil {
+		return err
+	}
+
+	msg, err := json.Marshal(struct {
+		Type  string
+		Price Price
+		Graph Graph
+		Feed  []rss.Item
+	}{
+		"info", price, graph, feed.Item,
+	})
+	if err != nil {
+		return err
+	}
+	s.Write(msg)
+
+	return nil
+}
+
+func handleConnectInfo(s *melody.Session) {
+	defer s.Close()
+
+	if err := updateSidebar(s); err != nil {
+		log.Println(err)
+		return
+	}
+	if err := updateInfo(s); err != nil {
+		log.Println(err)
 		return
 	}
 
-	if err := t.Execute(w, struct {
-		Template string
-		Sidebar  Sidebar
-	}{
-		"info", sidebar,
-	}); err != nil {
-		log.Print(err)
-	}
-
-	mel.HandleConnect(updateInfo)
-}
-
-func updateInfo(s *melody.Session) {
 	go func() {
-		t := time.NewTicker(15 * time.Second)
-		defer t.Stop()
+		fastTicker := time.NewTicker(5 * time.Second)
+		slowTicker := time.NewTicker(20 * time.Second)
+		defer func() {
+			fastTicker.Stop()
+			slowTicker.Stop()
+		}()
 
 		for {
-			graph, err := cryptoCompareGraph()
-			if err != nil {
-				log.Print(err)
-				return
+			select {
+			case <-fastTicker.C:
+				if err := updateSidebar(s); err != nil {
+					log.Println(err)
+					return
+				}
+			case <-slowTicker.C:
+				if err := updateInfo(s); err != nil {
+					log.Println(err)
+					return
+				}
 			}
-
-			price, err := cryptoComparePrice()
-			if err != nil {
-				log.Print(err)
-				return
-			}
-
-			msg, err := json.Marshal(struct {
-				Price Price
-				Graph Graph
-			}{
-				price, graph,
-			})
-			if err != nil {
-				log.Print(err)
-				return
-			}
-			s.Write(msg)
-
-			<-t.C
 		}
 	}()
 }
