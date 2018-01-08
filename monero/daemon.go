@@ -21,7 +21,7 @@ func NewDaemon(url string) *Daemon {
 // request requests and parses JSON from the Monero daemon RPC client into a
 // specified interface.
 func (d *Daemon) request(m string, p, t interface{}) error {
-	c := &http.Client{Timeout: time.Second * 5}
+	c := &http.Client{Timeout: time.Second * 10}
 
 	dat := encodeRequest(m, p)
 	req, err := http.NewRequest("POST", d.URL, bytes.NewBuffer(dat))

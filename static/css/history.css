@@ -1,7 +1,37 @@
+#content #transfers {
+}
+
 #content .transfer {
 	border-top: 1px solid #F0F1F2;
+	padding: 40px;
+}
+
+#content .transfer:first-child {
+	border-top: 0px;
+}
+
+#content .icon {
+	color: #4BC0C0;
+	text-shadow: 0px 2px 13px rgba(75, 192, 192, 0.7);
 }
 
 #content .amount {
-	font-size: 32px;
+	display: inline;
+	font-size: 28px;
+	margin-left: 4px;
+}
+
+#content .transfer-info {
+	margin-top: 16px;
+	padding-bottom: 16px;
+}
+
+#content .hash {
+	float: left;
+	text-justify: distribute;
+}
+
+#content .size {
+	color: #C7C9CD;
+	float: right;
 }

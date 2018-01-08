@@ -62,7 +62,6 @@ func updateSidebar(s *melody.Session) (err error) {
 	if err != nil {
 		return err
 	}
-	s.Write(msg)
 
-	return nil
+	return s.Write(msg)
 }

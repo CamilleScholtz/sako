@@ -12,11 +12,14 @@ ws.addEventListener('message', function(evt) {
 	document.getElementById("transfers").innerHTML = "";
 	m.Transfers.forEach(function(transfer) {
 		document.getElementById("transfers").innerHTML += " \
-			<div class=\"transfer\"> \
+			<li class=\"transfer\"> \
+				<i class=\"icon fa fa-send fa-flip-horizontal fa-2x fa-fw\"></i> \
 				<h1 class=\"amount\">" + transfer.Amount + "</h1> \
-				<span class=\"size\">" + transfer.Size + " kB</span> \
-				<span class=\"hash\">" + transfer.Hash + "</span> \
-			</div> \
+				<div class=\"transfer-info\"> \
+					<span class=\"hash\">" + transfer.Hash + "</span> \
+					<span class=\"size\">" + transfer.Size + " kB</span> \
+				</div> \
+			</li> \
 		";
 	});
 });

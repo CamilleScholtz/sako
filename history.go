@@ -53,20 +53,15 @@ func updateHistory(s *melody.Session) error {
 	if err != nil {
 		return err
 	}
-	s.Write(msg)
 
-	return nil
+	return s.Write(msg)
 }
 
 func handleConnectHistory(s *melody.Session) {
-	defer s.Close()
-
 	if err := updateSidebar(s); err != nil {
 		log.Println(err)
-		return
 	}
 	if err := updateHistory(s); err != nil {
-		log.Println(err)
 		return
 	}
 
@@ -76,19 +71,22 @@ func handleConnectHistory(s *melody.Session) {
 		defer func() {
 			fastTicker.Stop()
 			slowTicker.Stop()
+			s.Close()
 		}()
 
 		for {
+			if s.IsClosed() {
+				return
+			}
+
 			select {
 			case <-fastTicker.C:
 				if err := updateSidebar(s); err != nil {
 					log.Println(err)
-					return
 				}
 			case <-slowTicker.C:
 				if err := updateHistory(s); err != nil {
 					log.Println(err)
-					return
 				}
 			}
 		}
