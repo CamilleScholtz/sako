@@ -11,14 +11,28 @@ ws.addEventListener('message', function(evt) {
 	// Fill feed with info.
 	document.getElementById("transfers").innerHTML = "";
 	m.Transfers.forEach(function(transfer) {
+		var icon = "";
+		switch (transfer.Status) {
+		case "incoming":
+			icon = "<i class=\"icon fa fa-send fa-flip-horizontal fa-2x fa-fw incoming\"></i>";
+			break;
+		case "outgoing":
+			icon = "<i class=\"icon fa fa-send fa-2x fa-fw outgoing\"></i>";
+			break;
+		case "pending":
+			icon = "<i class=\"icon fa fa-hourglass fa-2x fa-fw pending\"></i>";
+			break;
+		case "failed":
+			icon = "<i class=\"icon fa fa-remove fa-2x fa-fw failed\"></i>";
+			break;
+		}
+
 		document.getElementById("transfers").innerHTML += " \
 			<li class=\"transfer\"> \
-				<i class=\"icon fa fa-send fa-flip-horizontal fa-2x fa-fw\"></i> \
+				" + icon + " \
 				<h1 class=\"amount\">" + transfer.Amount + "</h1> \
-				<div class=\"transfer-info\"> \
-					<span class=\"hash\">" + transfer.Hash + "</span> \
-					<span class=\"size\">" + transfer.Size + " kB</span> \
-				</div> \
+				<span class=\"time\">" + moment.unix(transfer.Timestamp).fromNow() + "</span> \
+				<a href=\"#\" class=\"details\">Details</a> \
 			</li> \
 		";
 	});

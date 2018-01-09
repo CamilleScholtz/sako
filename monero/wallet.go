@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sort"
 
 	digest "github.com/delphinus/go-digest-request"
 )
@@ -80,6 +81,7 @@ func (w *Wallet) Balance() (Balance, error) {
 		Balance   uint64 `json:"balance"`
 		UnBalance uint64 `json:"unlocked_balance"`
 	}{}
+
 	if err := w.request("getbalance", nil, &t); err != nil {
 		return Balance{}, err
 	}
@@ -95,6 +97,7 @@ func (w *Wallet) Height() (int64, error) {
 	var t = struct {
 		Height int64 `json:"height"`
 	}{}
+
 	if err := w.request("getheight", nil, &t); err != nil {
 		return 0, err
 	}
@@ -104,47 +107,96 @@ func (w *Wallet) Height() (int64, error) {
 
 // Transfer represents the values returned by `incoming_transfers`.
 type Transfer struct {
+	// The transaction ID of the transfer.
+	ID string
+
 	// The amount of the transfer.
 	Amount float64
 
-	// If the transfer has been spent.
-	Spent bool
+	// The fee of the transfer.
+	Fee float64
 
-	// The has of the transaction, several incoming transfers may share the same
-	// hash if they were in the same transaction.
-	Hash string
+	// The status of the transfer, can be "incoming", "outgoing", "pending" and
+	// "failed".
+	Status string
 
-	// The size of the transaction in kB.
-	Size uint64
+	// The transfer timestamp.
+	Timestamp uint64
 }
 
-// IncomingTransfers returns a list of incoming transfers to the wallet.
-func (w *Wallet) IncomingTransfers() ([]Transfer, error) {
+// Transfers returns a list of incoming transfers to the wallet.
+// TODO: Add Destinations.
+// TODO: Add pool.
+// TODO: God damn, simplify this.
+func (w *Wallet) Transfers(in, out, pending, failed bool) ([]Transfer,
+	error) {
+	type tt = struct {
+		TXID      string `json:"txid"`
+		PaymentID string `json:"payment_id"`
+		Height    uint64 `json:"height"`
+		Timestamp uint64 `json:"timestamp"`
+		Amount    uint64 `json:"amount"`
+		Fee       uint64 `json:"fee"`
+		Note      string `json:"note"`
+	}
 	var t = struct {
-		Transfers []struct {
-			Amount uint64 `json:"amount"`
-			Spent  bool   `json:"spent"`
-			TxHash string `json:"tx_hash"`
-			TxSize uint64 `json:"tx_size"`
-		} `json:"transfers"`
+		In      []tt `json:"in"`
+		Out     []tt `json:"out"`
+		Pending []tt `json:"pending"`
+		Failed  []tt `json:"failed"`
 	}{}
-	if err := w.request("incoming_transfers", struct {
-		TransferType string `json:"transfer_type"`
+
+	if err := w.request("get_transfers", struct {
+		In      bool `json:"in"`
+		Out     bool `json:"out"`
+		Pending bool `json:"pending"`
+		Failed  bool `json:"failed"`
 	}{
-		"all",
+		in, out, pending, failed,
 	}, &t); err != nil {
 		return []Transfer{}, err
 	}
 
 	var tr []Transfer
-	for _, p := range t.Transfers {
+	for _, p := range t.In {
 		tr = append(tr, Transfer{
+			p.TXID,
 			float64(p.Amount) / 1.e+12,
-			p.Spent,
-			p.TxHash,
-			p.TxSize,
+			float64(p.Fee) / 1.e+12,
+			"incoming",
+			p.Timestamp,
 		})
 	}
+	for _, p := range t.Out {
+		tr = append(tr, Transfer{
+			p.TXID,
+			float64(p.Amount) / 1.e+12,
+			float64(p.Fee) / 1.e+12,
+			"outgoing",
+			p.Timestamp,
+		})
+	}
+	for _, p := range t.Pending {
+		tr = append(tr, Transfer{
+			p.TXID,
+			float64(p.Amount) / 1.e+12,
+			float64(p.Fee) / 1.e+12,
+			"pending",
+			p.Timestamp,
+		})
+	}
+	for _, p := range t.Failed {
+		tr = append(tr, Transfer{
+			p.TXID,
+			float64(p.Amount) / 1.e+12,
+			float64(p.Fee) / 1.e+12,
+			"failed",
+			p.Timestamp,
+		})
+	}
+	sort.Slice(tr, func(i, j int) bool {
+		return tr[i].Timestamp > tr[j].Timestamp
+	})
 
 	return tr, nil
 }

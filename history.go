@@ -34,13 +34,9 @@ func updateHistory(s *melody.Session) error {
 		return err
 	}
 
-	rt, err := wallet.IncomingTransfers()
+	transfers, err := wallet.Transfers(true, true, true, true)
 	if err != nil {
 		return err
-	}
-	var transfers []monero.Transfer
-	for i := len(rt) - 1; i >= 0; i-- {
-		transfers = append(transfers, rt[i])
 	}
 
 	msg, err := json.Marshal(struct {
