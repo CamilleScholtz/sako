@@ -54,11 +54,11 @@ type settingsModel struct {
 	model := settingsModel{"settings", sb, c, config}
 
 	t, err := template.ParseFiles(
-		"static/templates/layout.html",
-		"static/templates/head.html",
-		"static/templates/sidebar.html",
-		"static/templates/settings.html",
-		"static/templates/settings.js",
+		"static/html/layout.html",
+		"static/html/head.html",
+		"static/html/sidebar.html",
+		"static/html/settings.html",
+		"static/html/settings.js",
 	)
 	if err != nil {
 		log.Print(err)

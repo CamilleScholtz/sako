@@ -8,14 +8,22 @@ import (
 	"time"
 
 	"github.com/olahol/melody"
-	rss "github.com/ungerik/go-rss"
 )
+
+// Info is a stuct with all the values needed in the info templates.
+type Info struct {
+	Type     string
+	Price    Price
+	GraphXMR Graph
+	GraphBTC Graph
+	GraphETH Graph
+}
 
 func info(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(
-		"static/templates/layout.html",
-		"static/templates/sidebar.html",
-		"static/templates/info.html",
+		"static/html/layout.html",
+		"static/html/sidebar.html",
+		"static/html/info.html",
 	)
 	if err != nil {
 		log.Print(err)
@@ -28,69 +36,51 @@ func info(w http.ResponseWriter, r *http.Request) {
 	mel.HandleConnect(handleConnectInfo)
 }
 
-func updateInfo(s *melody.Session) error {
-	graph, err := cryptoCompareGraph()
-	if err != nil {
-		return err
-	}
-
-	price, err := cryptoComparePrice()
-	if err != nil {
-		return err
-	}
-
-	feed, err := rss.Read("http://monero-observer.com/feed.rss")
-	if err != nil {
-		return err
-	}
-
-	msg, err := json.Marshal(struct {
-		Type  string
-		Price Price
-		Graph Graph
-		Feed  []rss.Item
-	}{
-		"info", price, graph, feed.Item,
-	})
-	if err != nil {
-		return err
-	}
-
-	return s.Write(msg)
-}
-
 func handleConnectInfo(s *melody.Session) {
-	if err := updateSidebar(s); err != nil {
-		log.Println(err)
-	}
-	if err := updateInfo(s); err != nil {
-		log.Println(err)
-	}
-
 	go func() {
-		fastTicker := time.NewTicker(5 * time.Second)
-		slowTicker := time.NewTicker(20 * time.Second)
-		defer func() {
-			fastTicker.Stop()
-			slowTicker.Stop()
-			s.Close()
-		}()
+		t := time.NewTicker(10 * time.Second)
+		defer t.Stop()
 
 		for {
 			if s.IsClosed() {
 				return
 			}
 
-			select {
-			case <-fastTicker.C:
-				if err := updateSidebar(s); err != nil {
-					log.Println(err)
-				}
-			case <-slowTicker.C:
-				if err := updateInfo(s); err != nil {
-					log.Println(err)
-				}
-			}
+			go updateSidebar(s)
+			go updateInfo(s)
+
+			<-t.C
 		}
 	}()
+}
+
+func updateInfo(s *melody.Session) {
+	data := Info{Type: "info"}
+	var err error
+
+	data.Price, err = cryptoComparePrice("XMR")
+	if err != nil {
+		log.Print(err)
+	}
+
+	data.GraphXMR, err = cryptoCompareGraph("XMR")
+	if err != nil {
+		log.Print(err)
+	}
+	data.GraphBTC, err = cryptoCompareGraph("BTC")
+	if err != nil {
+		log.Print(err)
+	}
+	data.GraphETH, err = cryptoCompareGraph("ETH")
+	if err != nil {
+		log.Print(err)
+	}
+
+	msg, err := json.Marshal(data)
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	s.Write(msg)
 }

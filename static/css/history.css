@@ -1,33 +1,110 @@
-#content #transfers {
+#history {
+	height: 100%;
+	margin-top: 1px;
 }
 
-#content .transfer {
+
+/* Buttons */
+
+#history .desc:after {
+	content: " ▲";
+}
+
+#history .asc:after {
+	content: " ▼";
+}
+
+
+/* List */
+
+#history .list {
+	top: 100px;
+	position: absolute;
+	width: 100%;
+}
+
+#history .list li {
+	border-bottom: 1px solid #F0F1F2;
+	margin: 0;
+}
+
+#history .list li:first-child {
 	border-top: 1px solid #F0F1F2;
-	padding: 32px;
 }
 
-#content .transfer:first-child {
-	border-top: 0px;
+
+/* Info box */
+
+#history .list .info {
+	background: #F6EFDC;
+	height: 128px;
+	margin: 20px;
+	width: 128px;
 }
 
-#content .incoming {
-	color: #4BC0C0;
-	text-shadow: 0px 2px 13px rgba(75, 192, 192, 0.7);
+#history .list .info .icon {
+	padding: 6px;
+	padding-top: 12px;
+	display: none;
 }
 
-#content .amount {
-	display: inline;
+#history .list .info .day {
+	display: block;
+	font-size: 48px;
+	text-align: center;
+}
+
+#history .list .info .month {
+	display: block;
+	font-size: 20px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#history .list .info .since {
+	display: block;
+	text-align: center;
+	margin-top: 14px;
+}
+
+
+/* Icon colors */
+
+#history .list .info .in {
+	color: #C0C3A3;
+}
+
+
+/* Amount and details */
+
+#history .list .amount {
 	font-size: 28px;
 	margin-left: 4px;
-}
-
-#content .time {
-	color: #C7C9CD;
-	display: block;
-	margin-top: 20px;
-}
-
-#content .details {
 	float: right;
-	margin-top: -20px;
+}
+
+
+/* Pagination */
+
+#history .pagination {
+	bottom: 0px;
+	display: inline-block;
+	left: 12px;
+	position: absolute;
+}
+
+#history .pagination li {
+	float: left;
+	padding: 8px 16px;
+	cursor: pointer;
+}
+
+#history .pagination li a {
+	color: #C7C9CD;
+	text-decoration: none;
+}
+
+#history .pagination .active a {
+	color: #24374B !important;
+	font-size: 28px;
 }

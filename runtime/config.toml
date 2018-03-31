@@ -2,10 +2,6 @@
 daemon = "node.moneroworld.com:18089"
 rpc = "127.0.0.1:18082"
 
-# Your Monero RPC client username and password.
-username = "onodera"
-password = "seekrit"
-
 # The IP and port to host sako on.
 host = "127.0.0.1:8080"
 

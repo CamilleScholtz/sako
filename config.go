@@ -15,9 +15,6 @@ type Config struct {
 	Daemon string
 	RPC    string
 
-	Username string
-	Password string
-
 	Host string
 
 	Currency string

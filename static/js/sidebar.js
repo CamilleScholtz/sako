@@ -5,8 +5,8 @@ ws.addEventListener('message', function(evt) {
 	}
 
 	// Update card info.
-	document.getElementById("balance").innerHTML = m.Balance.Balance;
-	document.getElementById("unbalance").innerHTML = m.Balance.UnBalance;
+	document.getElementById("balance").innerHTML = m.Balance;
+	document.getElementById("unbalance").innerHTML = m.UnBalance;
 	document.getElementById("address").innerHTML = m.Address;
 	document.getElementById("qr").src = "/static/images/qr/" + m.Address +
 		".png";

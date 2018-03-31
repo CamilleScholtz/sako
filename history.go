@@ -7,15 +7,22 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gabstv/go-monero/walletrpc"
 	"github.com/olahol/melody"
-	"github.com/onodera-punpun/sako/monero"
 )
+
+// History is a stuct with all the values needed in the history templates.
+type History struct {
+	Type      string
+	Price     Price
+	Transfers *walletrpc.GetTransfersResponse
+}
 
 func history(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(
-		"static/templates/layout.html",
-		"static/templates/sidebar.html",
-		"static/templates/history.html",
+		"static/html/layout.html",
+		"static/html/sidebar.html",
+		"static/html/history.html",
 	)
 	if err != nil {
 		log.Print(err)
@@ -28,63 +35,48 @@ func history(w http.ResponseWriter, r *http.Request) {
 	mel.HandleConnect(handleConnectHistory)
 }
 
-func updateHistory(s *melody.Session) error {
-	price, err := cryptoComparePrice()
-	if err != nil {
-		return err
-	}
-
-	transfers, err := wallet.Transfers(true, true, true, true)
-	if err != nil {
-		return err
-	}
-
-	msg, err := json.Marshal(struct {
-		Type      string
-		Price     Price
-		Transfers []monero.Transfer
-	}{
-		"history", price, transfers,
-	})
-	if err != nil {
-		return err
-	}
-
-	return s.Write(msg)
-}
-
 func handleConnectHistory(s *melody.Session) {
-	if err := updateSidebar(s); err != nil {
-		log.Println(err)
-	}
-	if err := updateHistory(s); err != nil {
-		return
-	}
-
 	go func() {
-		fastTicker := time.NewTicker(5 * time.Second)
-		slowTicker := time.NewTicker(20 * time.Second)
-		defer func() {
-			fastTicker.Stop()
-			slowTicker.Stop()
-			s.Close()
-		}()
+		t := time.NewTicker(10 * time.Second)
+		defer t.Stop()
 
 		for {
 			if s.IsClosed() {
 				return
 			}
 
-			select {
-			case <-fastTicker.C:
-				if err := updateSidebar(s); err != nil {
-					log.Println(err)
-				}
-			case <-slowTicker.C:
-				if err := updateHistory(s); err != nil {
-					log.Println(err)
-				}
-			}
+			go updateSidebar(s)
+			go updateHistory(s)
+
+			<-t.C
 		}
 	}()
+}
+
+func updateHistory(s *melody.Session) {
+	data := History{Type: "history"}
+	var err error
+
+	data.Price, err = cryptoComparePrice("XMR")
+	if err != nil {
+		log.Print(err)
+	}
+
+	data.Transfers, err = wallet.GetTransfers(walletrpc.GetTransfersRequest{
+		In:      true,
+		Out:     true,
+		Pending: true,
+		Failed:  true,
+	})
+	if err != nil {
+		log.Print(err)
+	}
+
+	msg, err := json.Marshal(data)
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	s.Write(msg)
 }

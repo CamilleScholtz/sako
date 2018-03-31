@@ -1,7 +1,9 @@
 #content {
+	height: 100vh;
 	float: right;
+	overflow: hidden;
 	position: relative;
-	width: calc(100% - 385px - 64px);
+	width: calc(100% - 612px);
 }
 
 #content h1 {
@@ -13,11 +15,9 @@
 }
 
 #content .text-green {
-	color: #4BC0C0;
-	text-shadow: 0px 2px 13px rgba(75, 192, 192, 0.7);
+	color: #C0C3A3;
 }
 
 #content .text-red {
-	color: #F27173;
-	text-shadow: 0px 2px 13px rgba(242, 113, 115, 0.7);
+	color: #FF7A73;
 }

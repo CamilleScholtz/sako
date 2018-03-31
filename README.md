@@ -2,7 +2,7 @@
 
 A self-hosted Monero web-interface. **WIP**
 
-![](https://punpun.moe/d3uc.png)
+![](https://punpun.moe/FwVZ.png)
 
 
 ## SYNOPSIS

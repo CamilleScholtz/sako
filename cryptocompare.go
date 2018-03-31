@@ -11,14 +11,12 @@ import (
 // cryptoCompareRequest requests and parses JSON from a specified URL into a
 // specified interface.
 func cryptoCompareRequest(url string, t interface{}) error {
-	c := &http.Client{Timeout: time.Second * 5}
+	c := http.Client{Timeout: time.Second * 5}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
-	// TODO: Use this?
-	//req.Header.Set("Connection", "Keep-Alive")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 
@@ -44,7 +42,7 @@ type Graph struct {
 
 // cryptoCompareGraph request and returns graphing information from the
 // CryptoCompare API.
-func cryptoCompareGraph() (Graph, error) {
+func cryptoCompareGraph(crypto string) (Graph, error) {
 	g := Graph{}
 
 	var histohour = struct {
@@ -54,8 +52,8 @@ func cryptoCompareGraph() (Graph, error) {
 		} `json:"Data"`
 	}{}
 	if err := cryptoCompareRequest(
-		"https://min-api.cryptocompare.com/data/histohour?fsym=XMR&limit=48&tsym="+
-			config.Currency, &histohour); err != nil {
+		"https://min-api.cryptocompare.com/data/histohour?fsym="+crypto+
+			"&limit=48&tsym="+config.Currency, &histohour); err != nil {
 		return g, err
 	}
 
@@ -76,7 +74,7 @@ type Price struct {
 
 // cryptoComparePrice request and returns price information from the
 // CryptoCompare API.
-func cryptoComparePrice() (Price, error) {
+func cryptoComparePrice(crypto string) (Price, error) {
 	p := Price{}
 
 	var price = struct {
@@ -84,8 +82,8 @@ func cryptoComparePrice() (Price, error) {
 		EUR float64 `json:"EUR"`
 	}{}
 	if err := cryptoCompareRequest(
-		"https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms="+config.
-			Currency, &price); err != nil {
+		"https://min-api.cryptocompare.com/data/price?fsym="+crypto+
+			"&tsyms="+config.Currency, &price); err != nil {
 		return p, err
 	}
 

@@ -2,66 +2,69 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 	"path"
 
 	"image/color"
 
+	"github.com/gabstv/go-monero/walletrpc"
 	"github.com/olahol/melody"
-	"github.com/onodera-punpun/sako/monero"
 	qrcode "github.com/skip2/go-qrcode"
 )
 
 // Sidebar is a stuct with all the values needed in the sidebar templates.
 type Sidebar struct {
 	Type      string
-	Balance   monero.Balance
+	Balance   string
+	UnBalance string
 	Address   string
-	CurHeight int64
+	CurHeight uint64
 	MaxHeight int64
 }
 
-func updateSidebar(s *melody.Session) (err error) {
-	sb := Sidebar{Type: "sidebar"}
+func updateSidebar(s *melody.Session) {
+	data := Sidebar{Type: "sidebar"}
 
 	// Get wallet balance.
-	sb.Balance, err = wallet.Balance()
+	b, u, err := wallet.GetBalance()
 	if err != nil {
-		return err
+		log.Print(err)
 	}
+	data.Balance = walletrpc.XMRToDecimal(b)
+	data.UnBalance = walletrpc.XMRToDecimal(u)
 
 	// Get wallet address.
-	sb.Address, err = wallet.Address()
+	data.Address, err = wallet.GetAddress()
 	if err != nil {
-		return err
+		log.Print(err)
 	}
 
 	// Get the current and max block height.
-	// TODO: Can I use this this to increase load times, as in compare the two
-	// and return if they are not equal?
-	sb.CurHeight, err = wallet.Height()
+	data.CurHeight, err = wallet.GetHeight()
 	if err != nil {
-		return err
+		log.Print(err)
 	}
-	sb.MaxHeight, err = daemon.Height()
+	data.MaxHeight, err = daemon.Height()
 	if err != nil {
-		return err
+		log.Print(err)
 	}
 
 	// Generate QR image if required.
-	if _, err := os.Stat(path.Join("static/images/qr", sb.Address+
+	if _, err := os.Stat(path.Join("static/images/qr", data.Address+
 		".png")); os.IsNotExist(err) {
-		if err := qrcode.WriteColorFile(sb.Address, qrcode.Medium, 226,
+		if err := qrcode.WriteColorFile(data.Address, qrcode.Medium, 226,
 			color.Transparent, color.White, path.Join("static/images/qr",
-				sb.Address+".png")); err != nil {
-			return err
+				data.Address+".png")); err != nil {
+			log.Print(err)
 		}
 	}
 
-	msg, err := json.Marshal(sb)
+	msg, err := json.Marshal(data)
 	if err != nil {
-		return err
+		log.Print(err)
+		return
 	}
 
-	return s.Write(msg)
+	s.Write(msg)
 }
