@@ -1,6 +1,8 @@
+var ws = new WebSocket("ws://" + window.location.host + "/ws");
+
 ws.addEventListener('message', function(evt) {
 	var m = JSON.parse(evt.data);
-	if (m.Type != "sidebar") {
+	if (m.Type != "layout") {
 		return;
 	}
 

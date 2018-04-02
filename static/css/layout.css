@@ -1,7 +1,12 @@
+/* Includes */
+
 @font-face {
 	font-family: "avenir heavy";
 	src: url('/static/fonts/avenir-heavy.woff2') format('woff2');
 }
+
+
+/* Global base */
 
 * {
 	color: #24374B;
@@ -13,7 +18,9 @@ body {
 	margin: 0;
 }
 
-#sidebar, #content {
+nav,
+main,
+footer {
 	background: #FFFFFF;
 }
 
@@ -26,19 +33,10 @@ a:focus {
 	outline: none;
 }
 
-button::-moz-focus-inner {
-	border: none;
-}
-
-select:-moz-focusring {
-	color: transparent;
-	text-shadow: 0 0 0 #000;
-}
-
 button, select {
 	-moz-appearance: none !important;
 	background: none;
-	border: 1px solid #F0F1F2;
+	border: 1px dashed #F0F1F2;
 	border-left: none;
 	box-shadow: -3px 0px 0px #C0C3A3;
 	cursor: pointer;
@@ -47,11 +45,267 @@ button, select {
 	transition: 0.2s;
 }
 
+button:hover, select:hover {
+	box-shadow: -3px 0px 0px #FF7A73;
+}
+
+button::-moz-focus-inner {
+	border: none;
+}
+
 select * {
 	-moz-appearance: none !important;
 	border: none;
 }
 
-button:hover, select:hover {
+select:-moz-focusring {
+	color: transparent;
+	text-shadow: 0 0 0 #000;
+}
+
+
+/* Grid base */
+
+body {
+	display: grid;
+}
+
+header {
+	align-self: center;
+	grid-area: header;
+	justify-self: center;
+}
+
+nav {
+	grid-area: nav;
+	justify-self: center;
+}
+
+main {
+	grid-area: main;
+}
+
+footer {
+	grid-area: footer;
+	justify-self: center;
+}
+
+
+/* Grid desktop */
+
+@media screen and (min-width: 1001px) {
+	body {
+		grid-template-areas:
+			"header main"
+			"nav    main"
+			"footer main";
+		grid-template-columns: 612px calc(100% - 612px);
+		grid-template-rows: 33% 55% auto;
+		height: 100vh;
+	}
+
+	header {
+		width: 338px;
+	}
+
+	header #card #particles-card-container {
+		height: 215px;
+	}
+
+	nav {
+		margin-top: -200px;
+		padding-top: 200px;
+		width: 384px;
+	}
+
+	footer {
+		height: 20px;
+		padding-bottom: 25px;
+		width: 384px;
+	}
+}
+
+
+/* Grid phone */
+
+@media screen and (max-width: 1000px) {
+	body {
+		grid-template-areas:
+			"header"
+			"nav"
+			"main"
+			"footer";
+		grid-template-columns: auto;
+		grid-template-rows: auto auto auto auto;
+	}
+
+	header {
+		width: 80%;
+	}
+
+	header #card #particles-card-container {
+		height: calc(80vw / 1.572);
+	}
+
+	nav {
+		width: 100%;
+	}
+}
+
+
+/* Header base */
+
+header * {
+	color: #FFFFFF;
+}
+
+header h1 {
+	display: inline;
+	font-size: 24px;
+	text-shadow: 0px 1px 10px #2B3459;
+}
+
+header h2 {
+	display: inline;
+	font-size: 14px;
+	font-weight: normal;
+	text-shadow: 0px 0px 5px #2B3459;
+}
+
+header .balance {
+	font-size: 24px;
+	text-shadow: 0px 1px 10px #2B3459;
+}
+
+
+/* Header */
+
+header {
+	perspective: 1000px;
+}
+
+header:hover #card {
+	transform: rotateY(180deg);
+}
+
+header #card {
+	background: #26405A;
+	border-radius: 10px;
+	transform-style: preserve-3d;
+	transition: 0.6s 0.4s;
+}
+
+header #card #particles-card-container {
+	border-radius: 10px;
+	overflow: hidden;
+	position: relative;
+}
+
+header #card #particles-card {
+	height: calc(100% + 128px);
+	margin-left: -64px;
+	margin-top: -64px;
+	position: absolute;
+	width: calc(100% + 128px);
+}
+
+header #card #front,
+header #card #back {
+	backface-visibility: hidden;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+
+header #card #front {
+	z-index: 2;
+	transform: rotateY(0deg);
+	padding: 30px;
+}
+
+header #card #back {
+	transform: rotateY(180deg);
+}
+
+header #card #front #monero img {
+	filter: drop-shadow(0px 1px 10px #2B3459);
+	margin-bottom: 14px;
+	margin-top: -8px;
+	width: 34px;
+}
+
+header #card #front #monero h1 {
+	margin-top: -4px;
+	margin-left: 10px;
+	position: absolute;
+}
+
+header #card #front .balance {
+	margin-bottom: 20px;
+}
+
+header #card #back #address {
+	float: left;
+	margin-right: -10px;
+	margin-top: 18px;
+	max-width: 108px;
+	text-align: justify;
+	text-justify: distribute;
+	text-align-last: center;
+	word-wrap: break-word;
+}
+
+header #card #back #qr {
+	filter: drop-shadow(0px 1px 10px #2B3459);
+	float: right;
+	margin: -5px;
+	pointer-events: none;
+}
+
+
+/* Nav */
+
+nav div {
+	border-top: 1px dashed #F0F1F2;
+}
+
+nav div:last-child {
+	border-bottom: 1px dashed #F0F1F2
+}
+
+nav div:hover {
+	box-shadow: -3px 0px 0px #C0C3A3;
+	transition: 0.2s;
+}
+
+nav div a {
+	display: block;
+	padding: 16px;
+	text-decoration: none;
+}
+
+nav div .fa {
+	margin-right: 10px;
+}
+
+nav .active {
 	box-shadow: -3px 0px 0px #FF7A73;
+}
+
+/* Main base */
+
+main .text-green {
+	color: #C0C3A3;
+}
+
+main .text-red {
+	color: #FF7A73;
+}
+
+
+/* Footer */
+
+footer .fa-spin {
+	font-size: 28px;
+	margin-left: 10px;
 }

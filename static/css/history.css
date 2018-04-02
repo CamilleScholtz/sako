@@ -24,12 +24,9 @@
 }
 
 #history .list li {
-	border-bottom: 1px solid #F0F1F2;
-	margin: 0;
-}
-
-#history .list li:first-child {
-	border-top: 1px solid #F0F1F2;
+	border: 1px dashed #F0F1F2;
+	margin: 20px;
+	float: left;
 }
 
 
@@ -38,33 +35,37 @@
 #history .list .info {
 	background: #F6EFDC;
 	height: 128px;
-	margin: 20px;
+	margin: -1px;
 	width: 128px;
 }
 
 #history .list .info .icon {
-	padding: 6px;
-	padding-top: 12px;
-	display: none;
+	font-size: 20px;
+	padding: 4px;
+	padding-left: 2px;
+	position: absolute;
 }
 
 #history .list .info .day {
 	display: block;
 	font-size: 48px;
+	padding-top: 7px;
 	text-align: center;
 }
 
 #history .list .info .month {
 	display: block;
 	font-size: 20px;
+	margin-top: -2px;
 	text-align: center;
 	text-transform: uppercase;
 }
 
 #history .list .info .since {
+	color: #C0C3A3;
 	display: block;
 	text-align: center;
-	margin-top: 14px;
+	margin-top: 6px;
 }
 
 
@@ -78,7 +79,6 @@
 /* Amount and details */
 
 #history .list .amount {
-	font-size: 28px;
 	margin-left: 4px;
 	float: right;
 }

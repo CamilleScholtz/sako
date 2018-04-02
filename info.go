@@ -10,7 +10,7 @@ import (
 	"github.com/olahol/melody"
 )
 
-// Info is a stuct with all the values needed in the info templates.
+// Info is a stuct with all the values needed in the info template.
 type Info struct {
 	Type     string
 	Price    Price
@@ -22,7 +22,6 @@ type Info struct {
 func info(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(
 		"static/html/layout.html",
-		"static/html/sidebar.html",
 		"static/html/info.html",
 	)
 	if err != nil {
@@ -46,7 +45,7 @@ func handleConnectInfo(s *melody.Session) {
 				return
 			}
 
-			go updateSidebar(s)
+			go updateLayout(s)
 			go updateInfo(s)
 
 			<-t.C

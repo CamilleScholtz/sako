@@ -13,8 +13,8 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 )
 
-// Sidebar is a stuct with all the values needed in the sidebar templates.
-type Sidebar struct {
+// Layout is a stuct with all the values needed in the layout template.
+type Layout struct {
 	Type      string
 	Balance   string
 	UnBalance string
@@ -23,8 +23,8 @@ type Sidebar struct {
 	MaxHeight int64
 }
 
-func updateSidebar(s *melody.Session) {
-	data := Sidebar{Type: "sidebar"}
+func updateLayout(s *melody.Session) {
+	data := Layout{Type: "layout"}
 
 	// Get wallet balance.
 	b, u, err := wallet.GetBalance()

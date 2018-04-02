@@ -1,23 +1,18 @@
-#content #graph-container {
+main #graph-container {
 	border-bottom: 256px solid #F6EFDC;
 	bottom: 0px;
 	height: 200px;
 	position: absolute;
-	width: 100%;
+	width: calc(100% - 612px);
 }
 
-#content #price-container {
+main #price-container {
 	bottom: 20px;
 	line-height: 10px;
 	margin-left: 40px;
 	position: absolute;
 }
 
-#content #price {
+main #price {
 	margin-left: -5px;
-}
-
-#content #change-percent-span,
-#content #change-price-span {
-	color: inherit;
 }

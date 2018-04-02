@@ -11,7 +11,7 @@ import (
 	"github.com/olahol/melody"
 )
 
-// History is a stuct with all the values needed in the history templates.
+// History is a stuct with all the values needed in the history template.
 type History struct {
 	Type      string
 	Price     Price
@@ -21,7 +21,6 @@ type History struct {
 func history(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(
 		"static/html/layout.html",
-		"static/html/sidebar.html",
 		"static/html/history.html",
 	)
 	if err != nil {
@@ -45,7 +44,7 @@ func handleConnectHistory(s *melody.Session) {
 				return
 			}
 
-			go updateSidebar(s)
+			go updateLayout(s)
 			go updateHistory(s)
 
 			<-t.C

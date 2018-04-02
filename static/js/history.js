@@ -41,7 +41,7 @@ ws.addEventListener('message', function(evt) {
 				txid:      transfer.txid,
 				timestamp: transfer.timestamp,
 				date:      moment.unix(transfer.timestamp).format("[<span class=\"day\">]D[</span><span class=\"month\">]MMM[</span>]"),
-				since:     "(" + moment.unix(transfer.timestamp).fromNow() + ")",
+				since:     moment.unix(transfer.timestamp).fromNow(),
 				amount:    (transfer.amount / 1e12).toFixed(12),
 				fee:       (transfer.fee / 1e12).toFixed(12),
 				height:    transfer.height,
@@ -68,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	list = new List("history", {
 		valueNames: ["txid", "timestamp", "date", "since", "amount", "fee", "height", "icon"],
 		pagination: true,
-		page:       5,
-		item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h1 class=\"amount\"></h1></li>",
+		page:       20,
+		item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h2 class=\"amount\"></h2></li>",
 	});
 
 	// Set default sorting.

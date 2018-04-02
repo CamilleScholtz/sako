@@ -1,10 +1,6 @@
-{{define "content"}}
+{{define "main"}}
 
 <div id="history">
-	<div id="sort">
-		<button class="sort" data-sort="timestamp">Sort by date</button>
-		<button class="sort" data-sort="amount">Sort by amount</button>
-	</div>
 	<select class="justselect" id="filter">
 		<option value="all" selected>Show all</option>
 		<option value="in">Only show incoming</option>
@@ -12,6 +8,10 @@
 		<option value="pending">Only show pending</option>
 		<option value="failed">Only show failed</option>
 	</select>
+	<span id="sort">
+		<button class="sort" data-sort="timestamp">Sort by date</button>
+		<button class="sort" data-sort="amount">Sort by amount</button>
+	</span>
 
 	<ul class="list">
 	</ul>
