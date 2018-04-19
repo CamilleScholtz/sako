@@ -36,7 +36,7 @@ func history(w http.ResponseWriter, r *http.Request) {
 
 func handleConnectHistory(s *melody.Session) {
 	go func() {
-		t := time.NewTicker(10 * time.Second)
+		t := time.NewTicker(8 * time.Second)
 		defer t.Stop()
 
 		for {

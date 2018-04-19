@@ -1,4 +1,38 @@
-var ws = new WebSocket("ws://" + window.location.host + "/ws");
+document.addEventListener("DOMContentLoaded", function() {
+	// Flip the card on click.
+	["click", "ontouchstart"].forEach(function(evt) {
+		document.getElementById("card").addEventListener(evt, function() {
+			if (this.classList.contains("flip")) {
+				this.classList.remove("flip");
+			} else {
+				this.classList.add("flip");
+			}
+		});
+	});
+
+	// Select the address on click.
+	["click", "ontouchstart"].forEach(function(evt) {
+		document.getElementById("address").addEventListener(evt, function() {
+			window.getSelection().selectAllChildren(this);
+		});
+	});
+
+	// Toggle the nav on responsive layouts.
+	["click", "ontouchstart"].forEach(function(evt) {
+		document.getElementById("hamburger").addEventListener(evt, function() {
+			var nav = document.getElementsByTagName("nav")[0];
+
+			this.animate("jello");
+			if (this.classList.contains("fa-bars")) {
+				nav.classList.add("expanded");
+				this.classList.replace("fa-bars", "fa-times");
+			} else {
+				nav.classList.remove("expanded");
+				this.classList.replace("fa-times", "fa-bars");
+			}
+		});
+	});
+});
 
 ws.addEventListener('message', function(evt) {
 	var m = JSON.parse(evt.data);
@@ -28,13 +62,4 @@ function showSync() {
 
 function hideSync() {
 	document.getElementById("sync").innerHTML = "";
-}
-
-// selectAll selects all the text in an element, used to select the public key
-// on click.
-function selectAll(e) {
-	var r = document.createRange();
-	r.selectNode(document.getElementById(e));
-	window.getSelection().removeAllRanges();
-	window.getSelection().addRange(r);
 }

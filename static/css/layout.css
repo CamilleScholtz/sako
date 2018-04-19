@@ -1,16 +1,29 @@
 /* Includes */
 
 @font-face {
-	font-family: "avenir heavy";
-	src: url('/static/fonts/avenir-heavy.woff2') format('woff2');
+	font-family: "avenir demi";
+	src: url("/static/fonts/avenir-demi.woff2") format("woff2");
 }
+
+@font-face {
+	font-family: "avenir demi";
+	src: url("/static/fonts/avenir-demi-italic.woff2") format("woff2");
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "avenir demi";
+	src: url("/static/fonts/avenir-bold.woff2") format("woff2");
+	font-weight: bold;
+}
+
 
 
 /* Global base */
 
 * {
 	color: #24374B;
-	font-family: "avenir heavy", sans serif;
+	font-family: "avenir demi";
 }
 
 body {
@@ -25,7 +38,7 @@ footer {
 }
 
 ul {
-	list-style: none;
+	list-style-type: none;
 	padding: 0;
 }
 
@@ -126,29 +139,38 @@ footer {
 }
 
 
-/* Grid phone */
+/* Grid responsive */
 
 @media screen and (max-width: 1000px) {
 	body {
 		grid-template-areas:
 			"header"
-			"nav"
 			"main"
-			"footer";
+			"footer"
+			"nav";
 		grid-template-columns: auto;
-		grid-template-rows: auto auto auto auto;
+		grid-template-rows: auto 50vh 0px 0px;
 	}
 
 	header {
-		width: 80%;
+		margin-top: 38px;
+		width: 85vw;
 	}
 
 	header #card #particles-card-container {
-		height: calc(80vw / 1.572);
+		height: calc(85vw / 1.572);
 	}
 
 	nav {
+		bottom: 0;
+		position: fixed;
 		width: 100%;
+		z-index: 1;
+	}
+
+	main {
+		margin-top: -100px;
+		padding-top: 100px;
 	}
 }
 
@@ -161,7 +183,7 @@ header * {
 
 header h1 {
 	display: inline;
-	font-size: 24px;
+	font-size: 25px;
 	text-shadow: 0px 1px 10px #2B3459;
 }
 
@@ -184,15 +206,16 @@ header {
 	perspective: 1000px;
 }
 
-header:hover #card {
-	transform: rotateY(180deg);
-}
-
 header #card {
 	background: #26405A;
 	border-radius: 10px;
+	cursor: pointer;
 	transform-style: preserve-3d;
-	transition: 0.6s 0.4s;
+	transition: 0.6s;
+}
+
+header #card.flip {
+	transform: rotateY(180deg);
 }
 
 header #card #particles-card-container {
@@ -235,7 +258,7 @@ header #card #front #monero img {
 }
 
 header #card #front #monero h1 {
-	margin-top: -4px;
+	margin-top: -6px;
 	margin-left: 10px;
 	position: absolute;
 }
@@ -245,6 +268,7 @@ header #card #front .balance {
 }
 
 header #card #back #address {
+	cursor: text;
 	float: left;
 	margin-right: -10px;
 	margin-top: 18px;
@@ -265,26 +289,37 @@ header #card #back #qr {
 
 /* Nav */
 
-nav div {
+nav #hamburger {
+	background: #FFFFFF;
+	bottom: 32px;
+	font-size: 26px;
+	right: 32px;
+	line-height: 40px;
+	padding: 16px;
+	position: fixed;
+	transition: all .3s ease;
+	width: 40px;
+}
+
+nav .link {
 	border-top: 1px dashed #F0F1F2;
 }
 
-nav div:last-child {
-	border-bottom: 1px dashed #F0F1F2
+nav .link:last-child {
+	border-bottom: 1px dashed #F0F1F2;
 }
 
-nav div:hover {
+nav .link:hover {
 	box-shadow: -3px 0px 0px #C0C3A3;
 	transition: 0.2s;
 }
 
-nav div a {
+nav .link a {
 	display: block;
-	padding: 16px;
 	text-decoration: none;
 }
 
-nav div .fa {
+nav .link .fa {
 	margin-right: 10px;
 }
 
@@ -292,7 +327,83 @@ nav .active {
 	box-shadow: -3px 0px 0px #FF7A73;
 }
 
+
+/* Nav desktop */
+
+@media screen and (min-width: 1001px) {
+	nav #hamburger {
+		display: none;
+	}
+
+	nav .link a {
+		padding: 16px;
+	}
+}
+
+
+/* Nav responsive */
+
+@media screen and (max-width: 1000px) {
+	nav #hamburger.fa-times {
+		background: #F6EFDC;
+	}
+
+	nav {
+		height: 0%;
+		transition: all .3s ease;
+	}
+
+	nav.expanded {
+		height: 100vh;
+	}
+
+	nav .link {
+		margin-left: 3px;
+	}
+
+	nav .link a {
+		line-height: calc(100vh / 8);
+		padding-left: 16px;
+		padding-right: 16px;
+		vertical-align: middle;
+	}
+}
+
+
 /* Main base */
+
+main a {
+	background: #D7BACC;
+	box-decoration-break: clone;
+	color: #FFFFFF;
+	line-height: 34px;
+	padding: 4px;
+	text-decoration: none;
+	transition: 0.1s;
+}
+
+main a:hover {
+	color: #D7BACC;
+}
+
+main small {
+	color: #C8C6D4;
+	font-size: 13px;
+}
+
+main meter {
+	background: #F6EFDC;
+	height: 3px;
+	width: 300px;
+}
+
+main meter:-moz-meter-sub-optimum::-moz-meter-bar {
+	background: #C0C3A3;
+}
+
+main meter:-moz-meter-optimum::-moz-meter-bar {
+	background: #FF7A73;
+}
 
 main .text-green {
 	color: #C0C3A3;
@@ -301,6 +412,25 @@ main .text-green {
 main .text-red {
 	color: #FF7A73;
 }
+
+
+/* Main desktop */
+
+@media screen and (min-width: 1001px) {
+	main h1 {
+		font-size: 60px;
+	}
+}
+
+
+/* Main responsive */
+
+@media screen and (max-width: 1000px) {
+	main h2 {
+		font-size: 20px;
+	}
+}
+
 
 
 /* Footer */

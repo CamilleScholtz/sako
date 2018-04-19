@@ -13,7 +13,8 @@ import (
 func cryptoCompareRequest(url string, t interface{}) error {
 	c := http.Client{Timeout: time.Second * 5}
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet,
+		"https://min-api.cryptocompare.com/data/"+url+"&extraParams=sako", nil)
 	if err != nil {
 		return err
 	}
@@ -36,33 +37,80 @@ func cryptoCompareRequest(url string, t interface{}) error {
 // Graph represents some of the values found in a CryptoCompare
 // `/data/histohour` response.
 type Graph struct {
-	Time  []int
+	Time  []uint64
 	Value []float64
 }
 
 // cryptoCompareGraph request and returns graphing information from the
 // CryptoCompare API.
 func cryptoCompareGraph(crypto string) (Graph, error) {
-	g := Graph{}
+	data := Graph{}
 
 	var histohour = struct {
 		Data []struct {
 			Close float64 `json:"close"`
-			Time  int     `json:"time"`
+			Time  uint64  `json:"time"`
 		} `json:"Data"`
 	}{}
-	if err := cryptoCompareRequest(
-		"https://min-api.cryptocompare.com/data/histohour?fsym="+crypto+
-			"&limit=48&tsym="+config.Currency, &histohour); err != nil {
-		return g, err
+	if err := cryptoCompareRequest("histohour?fsym="+crypto+"&limit=48&tsym="+
+		config.Currency, &histohour); err != nil {
+		return data, err
 	}
 
-	for _, i := range histohour.Data {
-		g.Time = append(g.Time, i.Time)
-		g.Value = append(g.Value, i.Close)
+	for _, d := range histohour.Data {
+		data.Time = append(data.Time, d.Time)
+		data.Value = append(data.Value, d.Close)
 	}
 
-	return g, nil
+	return data, nil
+}
+
+// News represents some of the values found in a CryptoCompare `/data/news`
+// response.
+type News []struct {
+	Time   uint64
+	Title  string
+	URL    string
+	Source string
+}
+
+// cryptoCompareNews request and returns news information from the CryptoCompare
+// API.
+func cryptoCompareNews(category string, max int) (News, error) {
+	data := News{}
+
+	var news = []struct {
+		PublishedOn uint64 `json:"published_on"`
+		Title       string `json:"title"`
+		URL         string `json:"url"`
+		SourceInfo  struct {
+			Name string `json:"name"`
+		} `json:"source_info"`
+	}{}
+	if err := cryptoCompareRequest("news/?categories="+category,
+		&news); err != nil {
+		return data, err
+	}
+
+	for i, d := range news {
+		if i == max {
+			break
+		}
+
+		data = append(data, struct {
+			Time   uint64
+			Title  string
+			URL    string
+			Source string
+		}{
+			d.PublishedOn,
+			d.Title,
+			d.URL,
+			d.SourceInfo.Name,
+		})
+	}
+
+	return data, nil
 }
 
 // Price represents some of the values found in a CryptoCompare `/data/price`
@@ -75,26 +123,25 @@ type Price struct {
 // cryptoComparePrice request and returns price information from the
 // CryptoCompare API.
 func cryptoComparePrice(crypto string) (Price, error) {
-	p := Price{}
+	data := Price{}
 
 	var price = struct {
 		USD float64 `json:"USD"`
 		EUR float64 `json:"EUR"`
 	}{}
-	if err := cryptoCompareRequest(
-		"https://min-api.cryptocompare.com/data/price?fsym="+crypto+
-			"&tsyms="+config.Currency, &price); err != nil {
-		return p, err
+	if err := cryptoCompareRequest("price?fsym="+crypto+"&tsyms="+
+		config.Currency, &price); err != nil {
+		return data, err
 	}
 
 	switch config.Currency {
 	case "EUR":
-		p.Symbol = "€"
+		data.Symbol = "€"
 	case "USD":
-		p.Symbol = "$"
+		data.Symbol = "$"
 	}
-	p.Value = reflect.Indirect(reflect.ValueOf(price)).FieldByName(config.
+	data.Value = reflect.Indirect(reflect.ValueOf(price)).FieldByName(config.
 		Currency).Float()
 
-	return p, nil
+	return data, nil
 }

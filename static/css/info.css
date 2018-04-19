@@ -1,10 +1,64 @@
-main #graph-container {
-	border-bottom: 256px solid #F6EFDC;
-	bottom: 0px;
-	height: 200px;
-	position: absolute;
-	width: calc(100% - 612px);
+/* News */
+
+main #news-container {
+	float: left;
+	margin: 24px;
+	max-width: 40%;
 }
+
+main #news-container #news .story {
+	padding-bottom: 18px;
+}
+
+main #news-container #news .story small {
+	display: inline;
+	font-style: italic;
+}
+
+
+/* Developent */
+
+main #development-container {
+	float: left;
+	margin: 24px;
+}
+
+main #development-container #development .project {
+	padding-bottom: 18px;
+}
+
+
+/* Graph */
+
+main #graph-container {
+	bottom: 0px;
+	position: absolute;
+}
+
+
+/* Graph desktop */
+
+@media screen and (min-width: 1001px) {
+	main #graph-container {
+		border-bottom: 256px solid #F6EFDC;
+		height: 200px;
+		width: calc(100% - 612px);
+	}
+}
+
+
+/* Graph responsive */
+
+@media screen and (max-width: 1000px) {
+	main #graph-container {
+		border-bottom: 156px solid #F6EFDC;
+		height: 128px;
+		width: 100%;
+	}
+}
+
+
+/* Price */
 
 main #price-container {
 	bottom: 20px;

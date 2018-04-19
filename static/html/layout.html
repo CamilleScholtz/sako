@@ -17,6 +17,7 @@
 	<script src="/static/vendor/js/animate.css.min.js"></script>
 	<script src="/static/vendor/js/list.min.js"></script>
 
+	<script>var ws = new WebSocket("ws://" + window.location.host + "/ws");</script>
 	<script src="/static/js/layout.js"></script>
 	<script src="/static/js/{{.}}.js"></script>
 </head>
@@ -44,21 +45,23 @@
 				</div>
 
 				<div id="back">
-					<div id="address" class="balance-label" onclick="selectAll('address')"></div>
+					<div id="address" class="balance-label"></div>
 					<img id="qr"></img>
 				</div>
 			</div>
 		</header>
 
 		<nav>
-			<div {{if eq . "info"}}class="active"{{end}}><a href="/info"><i class="fa fa-area-chart fa-fw"></i>Info</a></div>
-			<div {{if eq . "send"}}class="active"{{end}}><a href="/send"><i class="fa fa-send fa-fw"></i>Send</a></div>
-			<div {{if eq . "receive"}}class="active"{{end}}><a href="/receive"><i class="fa fa-send fa-flip-horizontal fa-fw"></i>Receive</a></div>
-			<div {{if eq . "address-book"}}class="active"{{end}}><a href="/address-book"><i class="fa fa-address-book fa-fw"></i>Address book</a></div>
-			<div {{if eq . "history"}}class="active"{{end}}><a href="/history"><i class="fa fa-history fa-fw"></i>History</a></div>
-			<div {{if eq . "advanced"}}class="active"{{end}}><a href="/advanced"><i class="fa fa-ellipsis-h fa-fw"></i>Advanced</a></div>
-			<div {{if eq . "settings"}}class="active"{{end}}><a href="/settings"><i class="fa fa-wrench fa-fw"></i>Settings</a></div>
-			<div {{if eq . "about"}}class="active"{{end}}><a href="/about"><i class="fa fa-question fa-fw"></i>About</a></div>
+			<div id="hamburger" class="fa fa-bars fa-fw"></div>
+
+			<div class="link{{if eq . "info"}} active{{end}}"><a href="/info"><i class="fa fa-area-chart fa-fw"></i>Info</a></div>
+			<div class="link{{if eq . "send"}} active{{end}}"><a href="/send"><i class="fa fa-send fa-fw"></i>Send</a></div>
+			<div class="link{{if eq . "receive"}} active{{end}}"><a href="/receive"><i class="fa fa-send fa-flip-horizontal fa-fw"></i>Receive</a></div>
+			<div class="link{{if eq . "address-book"}} active{{end}}"><a href="/address-book"><i class="fa fa-address-book fa-fw"></i>Address book</a></div>
+			<div class="link{{if eq . "history"}} active{{end}}"><a href="/history"><i class="fa fa-history fa-fw"></i>History</a></div>
+			<div class="link{{if eq . "advanced"}} active{{end}}"><a href="/advanced"><i class="fa fa-ellipsis-h fa-fw"></i>Advanced</a></div>
+			<div class="link{{if eq . "settings"}} active{{end}}"><a href="/settings"><i class="fa fa-wrench fa-fw"></i>Settings</a></div>
+			<div class="link{{if eq . "about"}} active{{end}}"><a href="/about"><i class="fa fa-question fa-fw"></i>About</a></div>
 		</nav>
 
 		<main>

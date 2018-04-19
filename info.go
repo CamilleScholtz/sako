@@ -17,6 +17,8 @@ type Info struct {
 	GraphXMR Graph
 	GraphBTC Graph
 	GraphETH Graph
+	News     News
+	Funding  Funding
 }
 
 func info(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +39,7 @@ func info(w http.ResponseWriter, r *http.Request) {
 
 func handleConnectInfo(s *melody.Session) {
 	go func() {
-		t := time.NewTicker(10 * time.Second)
+		t := time.NewTicker(8 * time.Second)
 		defer t.Stop()
 
 		for {
@@ -71,6 +73,16 @@ func updateInfo(s *melody.Session) {
 		log.Print(err)
 	}
 	data.GraphETH, err = cryptoCompareGraph("ETH")
+	if err != nil {
+		log.Print(err)
+	}
+
+	data.News, err = cryptoCompareNews("XMR", 6)
+	if err != nil {
+		log.Print(err)
+	}
+
+	data.Funding, err = getMoneroFunding()
 	if err != nil {
 		log.Print(err)
 	}
