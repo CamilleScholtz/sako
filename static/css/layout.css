@@ -18,7 +18,6 @@
 }
 
 
-
 /* Global base */
 
 * {
@@ -27,14 +26,36 @@
 }
 
 body {
-	background: #F5DBCE;
-	margin: 0;
+	background: #E6D6CE;
+	box-shadow: 0px 5px 55px -30px #B7A192;
+	overflow: hidden;
 }
 
-nav,
-main,
-footer {
-	background: #FFFFFF;
+body:before {
+	content: "";
+	background: #BAA393;
+	border: 1px solid #BAA393;
+	bottom: 66px;
+	box-shadow: 40px -320px 150px #FFF5ED, 0px 0px 30px 20px #B7A192, 30px -110px 150px #AD9889, -70px -5px 60px #B7A192;
+	height: 100px;
+	left: calc(var(--body-margin) + 220px);
+	position: absolute;
+	transform: skew(-61deg);
+	width: calc(100% - (2 * var(--body-margin)) - 60px);
+	z-index: -1;
+}
+
+body #noise {
+	background-image: url("/static/images/noise.png");
+	height: 100%;
+	left: 0;
+	mix-blend-mode: overlay;
+	opacity: 0.1;
+	pointer-events: none;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
 }
 
 ul {
@@ -91,7 +112,7 @@ header {
 
 nav {
 	grid-area: nav;
-	justify-self: center;
+	justify-self: end;
 }
 
 main {
@@ -100,7 +121,7 @@ main {
 
 footer {
 	grid-area: footer;
-	justify-self: center;
+	justify-self: end;
 }
 
 
@@ -108,13 +129,19 @@ footer {
 
 @media screen and (min-width: 1001px) {
 	body {
+		--header-height: 300px;
+		--body-margin: 90px;
+	}
+
+	body {
 		grid-template-areas:
-			"header main"
+			"header .   "
 			"nav    main"
 			"footer main";
-		grid-template-columns: 612px calc(100% - 612px);
-		grid-template-rows: 33% 55% auto;
-		height: 100vh;
+		grid-template-columns: 384px auto;
+		grid-template-rows: var(--header-height) auto 0px;
+		height: calc(100vh - (var(--body-margin) * 2));
+		margin: var(--body-margin);
 	}
 
 	header {
@@ -126,15 +153,18 @@ footer {
 	}
 
 	nav {
-		margin-top: -200px;
-		padding-top: 200px;
-		width: 384px;
+		padding-top: var(--header-height);
+		margin-top: calc(var(--header-height) * -1);
+		width: 100%;
 	}
 
 	footer {
-		height: 20px;
-		padding-bottom: 25px;
-		width: 384px;
+		width: 100%;
+		margin-top: -45px;
+	}
+
+	main {
+		margin-top: calc(var(--header-height) * -1);
 	}
 }
 
@@ -177,6 +207,14 @@ footer {
 
 /* Header base */
 
+header {
+	--text-shadow-color: #483B2E;
+}
+
+header {
+	z-index: 2;
+}
+
 header * {
 	color: #FFFFFF;
 }
@@ -184,19 +222,19 @@ header * {
 header h1 {
 	display: inline;
 	font-size: 25px;
-	text-shadow: 0px 1px 10px #2B3459;
+	text-shadow: 0px 1px 10px var(--text-shadow-color);
 }
 
 header h2 {
 	display: inline;
 	font-size: 14px;
 	font-weight: normal;
-	text-shadow: 0px 0px 5px #2B3459;
+	text-shadow: 0px 0px 5px var(--text-shadow-color);
 }
 
 header .balance {
 	font-size: 24px;
-	text-shadow: 0px 1px 10px #2B3459;
+	text-shadow: 0px 1px 10px var(--text-shadow-color);
 }
 
 
@@ -207,8 +245,9 @@ header {
 }
 
 header #card {
-	background: #26405A;
-	border-radius: 10px;
+	background: #6B734B;
+	border-radius: 5px;
+	box-shadow: 0px 6px 40px -5px #828778, 0px 6px 20px -10px #828778;
 	cursor: pointer;
 	transform-style: preserve-3d;
 	transition: 0.6s;
@@ -241,7 +280,6 @@ header #card #back {
 }
 
 header #card #front {
-	z-index: 2;
 	transform: rotateY(0deg);
 	padding: 30px;
 }
@@ -251,7 +289,7 @@ header #card #back {
 }
 
 header #card #front #monero img {
-	filter: drop-shadow(0px 1px 10px #2B3459);
+	filter: drop-shadow(0px 1px 10px var(--text-shadow-color));
 	margin-bottom: 14px;
 	margin-top: -8px;
 	width: 34px;
@@ -280,7 +318,7 @@ header #card #back #address {
 }
 
 header #card #back #qr {
-	filter: drop-shadow(0px 1px 10px #2B3459);
+	filter: drop-shadow(0px 1px 10px var(--text-shadow-color));
 	float: right;
 	margin: -5px;
 	pointer-events: none;
@@ -289,8 +327,12 @@ header #card #back #qr {
 
 /* Nav */
 
+nav {
+	background: #C6CACD;
+	box-shadow: inset -20px 0px 80px -8px #A8B0B5;
+}
+
 nav #hamburger {
-	background: #FFFFFF;
 	bottom: 32px;
 	font-size: 26px;
 	right: 32px;
@@ -302,11 +344,7 @@ nav #hamburger {
 }
 
 nav .link {
-	border-top: 1px dashed #F0F1F2;
-}
-
-nav .link:last-child {
-	border-bottom: 1px dashed #F0F1F2;
+	border-bottom: 1px dashed #A8B0B5;
 }
 
 nav .link:hover {
@@ -324,7 +362,7 @@ nav .link .fa {
 }
 
 nav .active {
-	box-shadow: -3px 0px 0px #FF7A73;
+	box-shadow: -3px 0px 0px #C9624E;
 }
 
 
@@ -372,8 +410,12 @@ nav .active {
 
 /* Main base */
 
+main {
+	background: #F5EAE6;
+}
+
 main a {
-	background: #D7BACC;
+	background: #C1CDD3;
 	box-decoration-break: clone;
 	color: #FFFFFF;
 	line-height: 34px;
@@ -383,7 +425,7 @@ main a {
 }
 
 main a:hover {
-	color: #D7BACC;
+	color: #C1CDD3;
 }
 
 main small {
@@ -402,7 +444,7 @@ main meter:-moz-meter-sub-optimum::-moz-meter-bar {
 }
 
 main meter:-moz-meter-optimum::-moz-meter-bar {
-	background: #FF7A73;
+	background: #C9624E;
 }
 
 main .text-green {
@@ -434,6 +476,10 @@ main .text-red {
 
 
 /* Footer */
+
+footer {
+	z-index: 2;
+}
 
 footer .fa-spin {
 	font-size: 28px;

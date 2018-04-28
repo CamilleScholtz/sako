@@ -3,22 +3,22 @@ var graphData = {
 		label: "XMR",
 		yAxisID: "XMR",
 		data: Array.apply(null, {length: 48}).map(Number.prototype.valueOf, 1),
-		borderColor: "#F6EFDC",
-		backgroundColor: "#F6EFDC",
+		borderColor: "#C95B55",
+		backgroundColor: "#C95B55",
 		pointRadius: 0,
 	}, {
 		label: "BTC",
 		yAxisID: "BTC",
 		data: Array.apply(null, {length: 48}).map(Number.prototype.valueOf, 1),
-		borderColor: "#FF7A73",
-		backgroundColor: "#FF7A73",
+		borderColor: "#AC4740",
+		backgroundColor: "#AC4740",
 		pointRadius: 0,
 	}, {
 		label: "ETH",
 		yAxisID: "ETH",
 		data: Array.apply(null, {length: 48}).map(Number.prototype.valueOf, 1),
-		borderColor: "#E8CEDE",
-		backgroundColor: "#E8CEDE",
+		borderColor: "#FFCA63",
+		backgroundColor: "#FFCA63",
 		pointRadius: 0,
 	}],
 	labels: Array.apply(null, {length: 48}).map(Number.call, Number),
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		data: graphData,
 		options: {
 			maintainAspectRatio: false,
-			tooltips: false,
+			events: [],
 			responsive: true,
 			legend: {
 				display: false

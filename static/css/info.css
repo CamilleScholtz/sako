@@ -1,3 +1,34 @@
+/* Graph */
+
+main #graph-container {
+	bottom: var(--body-margin);
+	pointer-events: none;
+	position: absolute;
+}
+
+
+/* Graph desktop */
+
+@media screen and (min-width: 1001px) {
+	main #graph-container {
+		border-bottom: 200px solid #C95B55;
+		height: 200px;
+		width: calc(100% - 384px - (2 * var(--body-margin)));
+	}
+}
+
+
+/* Graph responsive */
+
+@media screen and (max-width: 1000px) {
+	main #graph-container {
+		border-bottom: 100px solid #6B734B;
+		height: 128px;
+		width: 100%;
+	}
+}
+
+
 /* News */
 
 main #news-container {
@@ -28,40 +59,10 @@ main #development-container #development .project {
 }
 
 
-/* Graph */
-
-main #graph-container {
-	bottom: 0px;
-	position: absolute;
-}
-
-
-/* Graph desktop */
-
-@media screen and (min-width: 1001px) {
-	main #graph-container {
-		border-bottom: 256px solid #F6EFDC;
-		height: 200px;
-		width: calc(100% - 612px);
-	}
-}
-
-
-/* Graph responsive */
-
-@media screen and (max-width: 1000px) {
-	main #graph-container {
-		border-bottom: 156px solid #F6EFDC;
-		height: 128px;
-		width: 100%;
-	}
-}
-
-
 /* Price */
 
 main #price-container {
-	bottom: 20px;
+	bottom: calc(20px + var(--body-margin));
 	line-height: 10px;
 	margin-left: 40px;
 	position: absolute;
