@@ -10,6 +10,21 @@ A self-hosted Monero web-interface. **WIP**
 sako [arguments]
 
 
+## INSTALLATION
+
+* Install [Monero](https://getmonero.org/), and run `monero-wallet-rpc
+--rpc-bind-port 18082 --disable-rpc-login`. If you don't want to download the
+entire Monero blockchain you can use an external node using`monero-wallet-rpc
+--daemon-host node.viaxmr.com --rpc-bind-port 18082 --disable-rpc-login`.
+
+* Clone this repository and edit `runtime/config.toml` to fit your needs.
+
+* Build `sako` using `go -d -u -v && go build`.
+
+* Run `sako` using `./sako`.
+
+
+
 ## AUTHORS
 
 Camille Scholtz
