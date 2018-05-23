@@ -42,10 +42,13 @@ func updateSidebar() {
 	}
 
 	// Generate QR image if required.
-	if _, err := os.Stat(path.Join("static/images/qr", msg.Address+".png")); os.
-		IsNotExist(err) {
-		if err := generateQR(msg.Address); err != nil {
-			log.Print(err)
+	// TODO: Move this to js?
+	if msg.Address != "" {
+		if _, err := os.Stat(path.Join("static/images/qr", msg.Address+
+			".png")); os.IsNotExist(err) {
+			if err := generateQR(msg.Address); err != nil {
+				log.Print(err)
+			}
 		}
 	}
 
