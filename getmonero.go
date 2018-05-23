@@ -39,12 +39,12 @@ func getMoneroFunding() (Funding, error) {
 	for i := range title {
 		ct := r1.FindAllStringSubmatch(info[(2*i)].Text(), 2)
 		current, err := strconv.ParseFloat(strings.Replace(ct[0][1], ",", "",
-			-1), 32)
+			-1), 16)
 		if err != nil {
 			return data, err
 		}
-		total, err := strconv.ParseFloat(strings.Replace(ct[1][1], ",", "",
-			-1), 32)
+		total, err := strconv.ParseFloat(strings.Replace(ct[1][1], ",", "", -1),
+			16)
 		if err != nil {
 			return data, err
 		}

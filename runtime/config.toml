@@ -1,5 +1,5 @@
 # The Monero daemon and Monero RCP client IP and port.
-daemon = "node.moneroworld.com:18089"
+daemon = "node.viaxmr.com:18081"
 rpc = "127.0.0.1:18082"
 
 # The IP and port to host sako on.

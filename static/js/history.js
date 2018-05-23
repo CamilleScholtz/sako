@@ -1,17 +1,40 @@
 var list;
 
-ws.addEventListener('message', function(evt) {
-	var m = JSON.parse(evt.data);
-	if (m.Type != "history") {
-		return;
-	}
+document.addEventListener("DOMContentLoaded", function() {
+	// Hide scrollbar.
+	// TODO: This is kind of a bloated of doing this, fix?
+	OverlayScrollbars(document.querySelectorAll('main'), {
+		className: null,
+	});
 
-	// Update title to display the current XMR value.
-	document.title = document.title.replace(/.[0-9]+\.[0-9]+|\?/,
-		m.Price.Symbol + m.Price.Value.toFixed(2));
+	// Create list for transfers.
+	list = new List("history", {
+		valueNames: ["txid", "timestamp", "date", "since", "amount", "fee", "height", "icon"],
+		page:       20,
+		item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h2 class=\"amount\"></h2></li>",
+	});
 
-	for (k in m.Transfers) {
-		if (!Array.isArray(m.Transfers[k])) {
+	// Set default sorting.
+	list.sort("timestamp", {order: "desc"});
+
+	document.getElementById("filter").addEventListener("change", function() {
+		const self = this;
+
+		list.filter(function(item) {
+			if (self.value == "all") {
+				return true;
+			} else {
+				return item.values().icon.includes(self.value);
+			}
+		});
+	});
+});
+
+source.addEventListener("history", function(event) {
+	const msg = JSON.parse(event.data);
+
+	for (k in msg.Transfers) {
+		if (!Array.isArray(msg.Transfers[k])) {
 			continue;
 		}
 
@@ -31,7 +54,7 @@ ws.addEventListener('message', function(evt) {
 			break;
 		}
 
-		m.Transfers[k].forEach(function(transfer) {
+		msg.Transfers[k].forEach(function(transfer) {
 			// Skip TXID's already in the list.
 			if (list.get("txid", transfer.txid).length) {
 				return;
@@ -61,29 +84,4 @@ ws.addEventListener('message', function(evt) {
 			order: "asc"
 		});
 	}
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-	// Create list for transfers.
-	list = new List("history", {
-		valueNames: ["txid", "timestamp", "date", "since", "amount", "fee", "height", "icon"],
-		pagination: true,
-		page:       20,
-		item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h2 class=\"amount\"></h2></li>",
-	});
-
-	// Set default sorting.
-	list.sort("timestamp", {order: "desc"});
-
-	document.getElementById("filter").addEventListener("change", function() {
-		var self = this;
-
-		list.filter(function(item) {
-			if (self.value == "all") {
-				return true;
-			} else {
-				return item.values().icon.includes(self.value);
-			}
-		});
-	});
 });

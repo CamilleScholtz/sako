@@ -38,7 +38,7 @@ body:before {
 	bottom: 66px;
 	box-shadow: 40px -320px 150px #FFF5ED, 0px 0px 30px 20px #B7A192, 30px -110px 150px #AD9889, -70px -5px 60px #B7A192;
 	height: 100px;
-	left: calc(var(--body-margin) + 220px);
+	left: calc(var(--body-margin) + 210px);
 	position: absolute;
 	transform: skew(-61deg);
 	width: calc(100% - (2 * var(--body-margin)) - 60px);
@@ -95,6 +95,13 @@ select * {
 select:-moz-focusring {
 	color: transparent;
 	text-shadow: 0 0 0 #000;
+}
+
+.decimal {
+	color: inherit;
+	font-size: 53%;
+	margin-left: 2%;
+	vertical-align: super;
 }
 
 
@@ -216,7 +223,7 @@ header {
 }
 
 header * {
-	color: #FFFFFF;
+	color: #EDE4E1;
 }
 
 header h1 {
@@ -307,6 +314,7 @@ header #card #front .balance {
 
 header #card #back #address {
 	cursor: text;
+	filter: drop-shadow(0px 1px 10px var(--text-shadow-color));
 	float: left;
 	margin-right: -10px;
 	margin-top: 18px;
@@ -348,7 +356,7 @@ nav .link {
 }
 
 nav .link:hover {
-	box-shadow: -3px 0px 0px #C0C3A3;
+	box-shadow: -3px 0px 0px #828C6C;
 	transition: 0.2s;
 }
 
@@ -412,6 +420,7 @@ nav .active {
 
 main {
 	background: #F5EAE6;
+	overflow-y: auto;
 }
 
 main a {
@@ -429,26 +438,26 @@ main a:hover {
 }
 
 main small {
-	color: #C8C6D4;
+	color: #CCBAAD;
 	font-size: 13px;
 }
 
 main meter {
-	background: #F6EFDC;
+	background: #E6D6CE;
 	height: 3px;
 	width: 300px;
 }
 
 main meter:-moz-meter-sub-optimum::-moz-meter-bar {
-	background: #C0C3A3;
+	background: #828C6C;
 }
 
 main meter:-moz-meter-optimum::-moz-meter-bar {
-	background: #C9624E;
+	background: #CD6367;
 }
 
 main .text-green {
-	color: #C0C3A3;
+	color: #FF7A73;
 }
 
 main .text-red {

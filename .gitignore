@@ -1,3 +1,5 @@
 sako
 monero-wallet-rpc.*
 static/images/qr/*
+tls.crt
+tls.key

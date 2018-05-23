@@ -29,33 +29,43 @@ main #graph-container {
 }
 
 
-/* News */
+/* Submissions */
 
-main #news-container {
+main #submissions-container {
 	float: left;
 	margin: 24px;
-	max-width: 40%;
+	width: 40%;
 }
 
-main #news-container #news .story {
+main #submissions-container #submissions .story {
 	padding-bottom: 18px;
 }
 
-main #news-container #news .story small {
+main #submissions-container #submissions .story small {
 	display: inline;
 	font-style: italic;
 }
 
 
-/* Developent */
+/* Funding */
 
-main #development-container {
+main #funding-container {
 	float: left;
 	margin: 24px;
 }
 
-main #development-container #development .project {
+main #funding-container #funding .project {
 	padding-bottom: 18px;
+}
+
+main #funding-container #funding .project meter {
+	display: block;
+	margin-top: 10px;
+}
+
+main #funding-container #funding .project small {
+	display: block;
+	margin-top: 2px;
 }
 
 
@@ -63,7 +73,7 @@ main #development-container #development .project {
 
 main #price-container {
 	bottom: calc(20px + var(--body-margin));
-	line-height: 10px;
+	line-height: 0px;
 	margin-left: 40px;
 	position: absolute;
 }

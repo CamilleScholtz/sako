@@ -1,25 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/olahol/melody"
 )
-
-// Info is a stuct with all the values needed in the info template.
-type Info struct {
-	Type     string
-	Price    Price
-	GraphXMR Graph
-	GraphBTC Graph
-	GraphETH Graph
-	News     News
-	Funding  Funding
-}
 
 func info(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(
@@ -34,64 +20,80 @@ func info(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	mel.HandleConnect(handleConnectInfo)
+	go infoEvent()
 }
 
-func handleConnectInfo(s *melody.Session) {
-	go func() {
-		t := time.NewTicker(8 * time.Second)
-		defer t.Stop()
-
-		for {
-			if s.IsClosed() {
-				return
-			}
-
-			go updateLayout(s)
-			go updateInfo(s)
-
-			<-t.C
-		}
+func infoEvent() {
+	tick := time.NewTicker(8 * time.Second)
+	slow := time.NewTicker(64 * time.Second)
+	defer func() {
+		tick.Stop()
+		slow.Stop()
 	}()
+
+	// TODO: Can I somehow do an instant first tick?
+	go updateSidebar()
+	go updateGraph()
+	go updateSubmissions()
+	go updateFunding()
+
+	for {
+		select {
+		case <-tick.C:
+			go updateSidebar()
+			go updateGraph()
+		case <-slow.C:
+			go updateSubmissions()
+			go updateFunding()
+		case <-close:
+			return
+		}
+	}
 }
 
-func updateInfo(s *melody.Session) {
-	data := Info{Type: "info"}
+func updateGraph() {
 	var err error
+	msg := struct {
+		Price Price
+		XMR   Graph
+		BTC   Graph
+		ETH   Graph
+	}{}
 
-	data.Price, err = cryptoComparePrice("XMR")
+	msg.Price, err = cryptoComparePrice("XMR")
 	if err != nil {
 		log.Print(err)
 	}
-
-	data.GraphXMR, err = cryptoCompareGraph("XMR")
+	msg.XMR, err = cryptoCompareGraph("XMR")
 	if err != nil {
 		log.Print(err)
 	}
-	data.GraphBTC, err = cryptoCompareGraph("BTC")
+	msg.BTC, err = cryptoCompareGraph("BTC")
 	if err != nil {
 		log.Print(err)
 	}
-	data.GraphETH, err = cryptoCompareGraph("ETH")
-	if err != nil {
-		log.Print(err)
-	}
-
-	data.News, err = cryptoCompareNews("XMR", 6)
-	if err != nil {
-		log.Print(err)
-	}
-
-	data.Funding, err = getMoneroFunding()
+	msg.ETH, err = cryptoCompareGraph("ETH")
 	if err != nil {
 		log.Print(err)
 	}
 
-	msg, err := json.Marshal(data)
+	event <- Event{"graph", msg}
+}
+
+func updateSubmissions() {
+	msg, err := redditSubmissions("monero")
 	if err != nil {
 		log.Print(err)
-		return
 	}
 
-	s.Write(msg)
+	event <- Event{"submissions", msg}
+}
+
+func updateFunding() {
+	msg, err := getMoneroFunding()
+	if err != nil {
+		log.Print(err)
+	}
+
+	event <- Event{"funding", msg}
 }

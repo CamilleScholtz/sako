@@ -27,8 +27,8 @@ func cryptoCompareRequest(url string, t interface{}) error {
 	}
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("request: Returned invalid statuscode %d",
-			res.StatusCode)
+		return fmt.Errorf("request: Returned invalid statuscode %d", res.
+			StatusCode)
 	}
 
 	return json.NewDecoder(res.Body).Decode(t)
@@ -65,54 +65,6 @@ func cryptoCompareGraph(crypto string) (Graph, error) {
 	return data, nil
 }
 
-// News represents some of the values found in a CryptoCompare `/data/news`
-// response.
-type News []struct {
-	Time   uint64
-	Title  string
-	URL    string
-	Source string
-}
-
-// cryptoCompareNews request and returns news information from the CryptoCompare
-// API.
-func cryptoCompareNews(category string, max int) (News, error) {
-	data := News{}
-
-	var news = []struct {
-		PublishedOn uint64 `json:"published_on"`
-		Title       string `json:"title"`
-		URL         string `json:"url"`
-		SourceInfo  struct {
-			Name string `json:"name"`
-		} `json:"source_info"`
-	}{}
-	if err := cryptoCompareRequest("news/?categories="+category,
-		&news); err != nil {
-		return data, err
-	}
-
-	for i, d := range news {
-		if i == max {
-			break
-		}
-
-		data = append(data, struct {
-			Time   uint64
-			Title  string
-			URL    string
-			Source string
-		}{
-			d.PublishedOn,
-			d.Title,
-			d.URL,
-			d.SourceInfo.Name,
-		})
-	}
-
-	return data, nil
-}
-
 // Price represents some of the values found in a CryptoCompare `/data/price`
 // response. It also includes a currency symbol.
 type Price struct {
@@ -129,8 +81,8 @@ func cryptoComparePrice(crypto string) (Price, error) {
 		USD float64 `json:"USD"`
 		EUR float64 `json:"EUR"`
 	}{}
-	if err := cryptoCompareRequest("price?fsym="+crypto+"&tsyms="+
-		config.Currency, &price); err != nil {
+	if err := cryptoCompareRequest("price?fsym="+crypto+"&tsyms="+config.
+		Currency, &price); err != nil {
 		return data, err
 	}
 

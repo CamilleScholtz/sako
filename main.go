@@ -7,16 +7,25 @@ import (
 
 	"github.com/gabstv/go-monero/walletrpc"
 	"github.com/gorilla/mux"
-	"github.com/olahol/melody"
 	"github.com/onodera-punpun/sako/monero"
+	"github.com/onodera-punpun/sako/sse"
 )
 
+// Global variables.
 var (
 	wallet walletrpc.Client
 	// TODO: Replace this with daemonrpc
 	daemon *monero.Daemon
-	mel    = melody.New()
+
+	event chan Event
+	close chan bool
 )
+
+// Event describes an SSE event.
+type Event struct {
+	Name    string
+	Message interface{}
+}
 
 func main() {
 	if err := parseConfig(); err != nil {
@@ -28,29 +37,47 @@ func main() {
 	})
 	daemon = monero.NewDaemon("http://" + config.Daemon + "/json_rpc")
 
-	r := mux.NewRouter()
+	event = make(chan Event)
+	// TODO: Use context?
+	close = make(chan bool)
 
-	// Handle pages.
-	r.HandleFunc("/", info)
-	r.HandleFunc("/info", info)
-	r.HandleFunc("/history", history)
-	//r.HandleFunc("/settings", settings)
-	//r.HandleFunc("/about", about)
+	mux := mux.NewRouter()
 
-	// Handle WebSockets.
-	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		mel.HandleRequest(w, r)
+	// Handle SSE.
+	mux.HandleFunc("/event", func(w http.ResponseWriter, r *http.Request) {
+		c, err := sse.Upgrade(w, r)
+		if err != nil {
+			log.Print(err)
+		}
+
+		for {
+			select {
+			case e := <-event:
+				if err := c.WriteJSONEvent(e.Name, e.Message); err != nil {
+					log.Print(e.Name, ": ", err)
+				}
+			case <-r.Context().Done():
+				close <- true
+				return
+			}
+		}
 	})
 
-	// Handle static assets.
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
-		http.FileServer(http.Dir("static"))))
+	// Handle pages.
+	mux.HandleFunc("/", info)
+	mux.HandleFunc("/info", info)
+	mux.HandleFunc("/history", history)
+	//mux.HandleFunc("/settings", settings)
+	//mux.HandleFunc("/about", about)
 
-	s := &http.Server{
-		Handler:      r,
-		Addr:         config.Host,
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+	// Handle static assets.
+	mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.
+		FileServer(http.Dir("static"))))
+
+	srv := &http.Server{
+		Handler:     mux,
+		Addr:        config.Host,
+		ReadTimeout: 15 * time.Second,
 	}
-	log.Fatal(s.ListenAndServe())
+	log.Fatal(srv.ListenAndServe())
 }

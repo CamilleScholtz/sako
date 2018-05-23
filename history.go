@@ -1,22 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gabstv/go-monero/walletrpc"
-	"github.com/olahol/melody"
 )
-
-// History is a stuct with all the values needed in the history template.
-type History struct {
-	Type      string
-	Price     Price
-	Transfers *walletrpc.GetTransfersResponse
-}
 
 func history(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(
@@ -31,37 +22,43 @@ func history(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	mel.HandleConnect(handleConnectHistory)
+	historyEvent()
 }
 
-func handleConnectHistory(s *melody.Session) {
-	go func() {
-		t := time.NewTicker(8 * time.Second)
-		defer t.Stop()
+func historyEvent() {
+	tick := time.NewTicker(8 * time.Second)
+	defer tick.Stop()
 
-		for {
-			if s.IsClosed() {
-				return
-			}
+	// TODO: Can I somehow do an instant first tick?
+	go updateSidebar()
+	go updatePrice()
+	go updateHistory()
 
-			go updateLayout(s)
-			go updateHistory(s)
-
-			<-t.C
+	for {
+		select {
+		case <-tick.C:
+			go updateSidebar()
+			go updatePrice()
+			go updateHistory()
+		case <-close:
+			return
 		}
-	}()
+	}
 }
 
-func updateHistory(s *melody.Session) {
-	data := History{Type: "history"}
+func updateHistory() {
 	var err error
+	msg := struct {
+		Price     Price
+		Transfers *walletrpc.GetTransfersResponse
+	}{}
 
-	data.Price, err = cryptoComparePrice("XMR")
+	msg.Price, err = cryptoComparePrice("XMR")
 	if err != nil {
 		log.Print(err)
 	}
 
-	data.Transfers, err = wallet.GetTransfers(walletrpc.GetTransfersRequest{
+	msg.Transfers, err = wallet.GetTransfers(walletrpc.GetTransfersRequest{
 		In:      true,
 		Out:     true,
 		Pending: true,
@@ -71,11 +68,5 @@ func updateHistory(s *melody.Session) {
 		log.Print(err)
 	}
 
-	msg, err := json.Marshal(data)
-	if err != nil {
-		log.Print(err)
-		return
-	}
-
-	s.Write(msg)
+	event <- Event{"history", msg}
 }

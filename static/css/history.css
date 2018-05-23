@@ -6,6 +6,7 @@
 
 /* Buttons */
 
+/* TODO: Use fontawesome. */
 #history .desc:after {
 	content: " ▲";
 }
@@ -18,42 +19,73 @@
 /* List */
 
 #history .list {
-	top: 100px;
-	position: absolute;
-	width: 100%;
+	margin-left: calc(50% - (100px + 30px));
 }
 
 #history .list li {
-	border: 1px dashed #F0F1F2;
-	margin: 20px;
-	float: left;
+	width: 128px;
+	height: 256px;
+}
+
+#history .list li:nth-child(odd) {
+	border-right: 50px solid #F5EAE6;
+	box-shadow: 3px 0px 0px #E6D6CE;
+	margin-left: -91px;
+}
+
+#history .list li:nth-child(even) {
+	border-left: 50px solid #F5EAE6;
+	box-shadow: -3px 0px 0px #E6D6CE;
+	margin-left: 90px;
+}
+
+#history .list li:before {
+	content: "";
+	background: #6B734B;
+	height: 128px;
+	position: absolute;
+	width: 3px;
+}
+
+#history .list li:nth-child(odd):before {
+	margin-left: 178px;
+}
+
+#history .list li:nth-child(even):before {
+	margin-left: -53px;
 }
 
 
-/* Info box */
+/* Info block */
 
-#history .list .info {
-	background: #F6EFDC;
+#history .list li .info {
+	background: #6B734B;
 	height: 128px;
-	margin: -1px;
 	width: 128px;
 }
 
-#history .list .info .icon {
+#history .list li:nth-child(odd) .info {
+}
+
+#history .list li:nth-child(even) .info {
+}
+
+
+#history .list li .info .icon {
 	font-size: 20px;
 	padding: 4px;
 	padding-left: 2px;
 	position: absolute;
 }
 
-#history .list .info .day {
+#history .list li .info .day {
 	display: block;
 	font-size: 48px;
 	padding-top: 7px;
 	text-align: center;
 }
 
-#history .list .info .month {
+#history .list li .info .month {
 	display: block;
 	font-size: 20px;
 	margin-top: -2px;
@@ -61,7 +93,7 @@
 	text-transform: uppercase;
 }
 
-#history .list .info .since {
+#history .list li .info .since {
 	color: #C0C3A3;
 	display: block;
 	text-align: center;
@@ -71,40 +103,20 @@
 
 /* Icon colors */
 
-#history .list .info .in {
+#history .list li .info .in {
 	color: #C0C3A3;
 }
 
 
 /* Amount and details */
 
-#history .list .amount {
-	margin-left: 4px;
-	float: right;
-}
 
-
-/* Pagination */
-
-#history .pagination {
-	bottom: 0px;
-	display: inline-block;
-	left: 12px;
+#history .list li .amount {
 	position: absolute;
 }
 
-#history .pagination li {
-	float: left;
-	padding: 8px 16px;
-	cursor: pointer;
+#history .list li:nth-child(odd) .amount {
 }
 
-#history .pagination li a {
-	color: #C7C9CD;
-	text-decoration: none;
-}
-
-#history .pagination .active a {
-	color: #24374B !important;
-	font-size: 28px;
+#history .list li:nth-child(even) .amount {
 }
