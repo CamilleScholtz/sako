@@ -1,30 +1,28 @@
 <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>sako / {{.}} [?]</title>
 
-<head>
-	<title>sako / {{.}} [?]</title>
+		<meta name="viewport" content="width=device-width">
 
-	<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link rel="stylesheet" href="/static/vendor/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/static/vendor/css/overlay-scrollbars.min.css">
+		<link rel="stylesheet" href="/static/vendor/css/animate.min.css">
 
-	<link rel="stylesheet" href="/static/vendor/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/static/vendor/css/overlay-scrollbars.min.css">
-	<link rel="stylesheet" href="/static/vendor/css/animate.min.css">
+		<link rel="stylesheet" href="/static/css/layout.css">
+		<link rel="stylesheet" href="/static/css/{{.}}.css">
 
-	<link rel="stylesheet" href="/static/css/layout.css">
-	<link rel="stylesheet" href="/static/css/{{.}}.css">
+		<script src="/static/vendor/js/moment.min.js"></script>
+		<script src="/static/vendor/js/chart.min.js"></script>
+		<script src="/static/vendor/js/overlay-scrollbars.min.js"></script>
+		<script src="/static/vendor/js/particles.min.js"></script>
+		<script src="/static/vendor/js/animate.css.min.js"></script>
+		<script src="/static/vendor/js/list.min.js"></script>
 
-	<script src="/static/vendor/js/moment.min.js"></script>
-	<script src="/static/vendor/js/chart.min.js"></script>
-	<script src="/static/vendor/js/overlay-scrollbars.min.js"></script>
-	<script src="/static/vendor/js/particles.min.js"></script>
-	<script src="/static/vendor/js/animate.css.min.js"></script>
-	<script src="/static/vendor/js/list.min.js"></script>
-
-	<script src="/static/js/util.js"></script>
-	<script src="/static/js/layout.js"></script>
-	<script src="/static/js/{{.}}.js"></script>
-</head>
-
-<html>
+		<script src="/static/js/util.js"></script>
+		<script src="/static/js/layout.js"></script>
+		<script src="/static/js/{{.}}.js"></script>
+	</head>
 	<body>
 		<div id="noise"></div>
 
@@ -37,7 +35,7 @@
 
 				<div id="front">
 					<div id="monero">
-						<img src="/static/images/monero.svg"></img>
+						<img src="/static/images/monero.svg" alt="Monero logo">
 						<h1>MONERO</h1>
 					</div>
 
@@ -50,7 +48,7 @@
 
 				<div id="back">
 					<div id="address" class="balance-label"></div>
-					<img id="qr"></img>
+					<img id="qr" alt="Balance QR code" width="226" height="226">
 				</div>
 			</div>
 		</header>
@@ -75,7 +73,7 @@
 		<footer>
 			<span id="sync">
 				<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i> Syncing...
-			<span>
+			</span>
 		</footer>
 	</body>
 </html>
