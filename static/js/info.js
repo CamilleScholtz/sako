@@ -24,39 +24,6 @@ var graphData = {
 	labels: Array.apply(null, {length: 48}).map(Number.call, Number),
 };
 
-document.addEventListener("DOMContentLoaded", function() {
-	const ctx = document.getElementById("graph").getContext("2d");
-
-	window.graph = new Chart(ctx, {
-		type: "line",
-		data: graphData,
-		options: {
-			maintainAspectRatio: false,
-			events: [],
-			responsive: true,
-			legend: {
-				display: false
-			},
-			scales: {
-				xAxes: [{
-					display: false,
-					type: 'time',
-				}],
-				yAxes: [{
-					id: "XMR",
-					display: false,
-				}, {
-					id: "BTC",
-					display: false,
-				}, {
-					id: "ETH",
-					display: false,
-				}],
-			},
-		},
-	});
-});
-
 source.addEventListener("graph", function(event) {
 	const msg = JSON.parse(event.data);
 
@@ -130,4 +97,33 @@ source.addEventListener("funding", function(event) {
 		content += "</div>";
 	});
 	document.getElementById("funding").innerHTML = content;
+});
+
+window.graph = new Chart(document.getElementById("graph").getContext("2d"), {
+	type: "line",
+	data: graphData,
+	options: {
+		maintainAspectRatio: false,
+		events: [],
+		responsive: true,
+		legend: {
+			display: false
+		},
+		scales: {
+			xAxes: [{
+				display: false,
+				type: 'time',
+			}],
+			yAxes: [{
+				id: "XMR",
+				display: false,
+			}, {
+				id: "BTC",
+				display: false,
+			}, {
+				id: "ETH",
+				display: false,
+			}],
+		},
+	},
 });

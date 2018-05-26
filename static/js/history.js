@@ -1,33 +1,8 @@
-var list;
-
-document.addEventListener("DOMContentLoaded", function() {
-	// Hide scrollbar.
-	// TODO: This is kind of a bloated of doing this, fix?
-	OverlayScrollbars(document.querySelectorAll('main'), {
-		className: null,
-	});
-
-	// Create list for transfers.
-	list = new List("history", {
-		valueNames: ["txid", "timestamp", "date", "since", "amount", "fee", "height", "icon"],
-		page:       20,
-		item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h2 class=\"amount\"></h2></li>",
-	});
-
-	// Set default sorting.
-	list.sort("timestamp", {order: "desc"});
-
-	document.getElementById("filter").addEventListener("change", function() {
-		const self = this;
-
-		list.filter(function(item) {
-			if (self.value == "all") {
-				return true;
-			} else {
-				return item.values().icon.includes(self.value);
-			}
-		});
-	});
+// Create list for transfers.
+var list = new List("history", {
+	valueNames: ["txid", "timestamp", "date", "since", "amount", "fee", "height", "icon"],
+	page:       20,
+	item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h2 class=\"amount\"></h2></li>",
 });
 
 source.addEventListener("history", function(event) {
@@ -84,4 +59,25 @@ source.addEventListener("history", function(event) {
 			order: "asc"
 		});
 	}
+});
+
+// Hide scrollbar.
+// TODO: This is kind of a bloated of doing this, fix?
+OverlayScrollbars(document.querySelectorAll('main'), {
+	className: null,
+});
+
+// Set default sorting.
+list.sort("timestamp", {order: "desc"});
+
+document.getElementById("filter").addEventListener("change", function() {
+	const self = this;
+
+	list.filter(function(item) {
+		if (self.value == "all") {
+			return true;
+		} else {
+			return item.values().icon.includes(self.value);
+		}
+	});
 });

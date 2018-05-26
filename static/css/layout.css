@@ -299,7 +299,6 @@ header #card #front #monero img {
 	filter: drop-shadow(0px 1px 10px var(--text-shadow-color));
 	margin-bottom: 14px;
 	margin-top: -8px;
-	width: 34px;
 }
 
 header #card #front #monero h1 {

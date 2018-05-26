@@ -11,17 +11,6 @@
 
 		<link rel="stylesheet" href="/static/css/layout.css">
 		<link rel="stylesheet" href="/static/css/{{.}}.css">
-
-		<script src="/static/vendor/js/moment.min.js"></script>
-		<script src="/static/vendor/js/chart.min.js"></script>
-		<script src="/static/vendor/js/overlay-scrollbars.min.js"></script>
-		<script src="/static/vendor/js/particles.min.js"></script>
-		<script src="/static/vendor/js/animate.css.min.js"></script>
-		<script src="/static/vendor/js/list.min.js"></script>
-
-		<script src="/static/js/util.js"></script>
-		<script src="/static/js/layout.js"></script>
-		<script src="/static/js/{{.}}.js"></script>
 	</head>
 
 	<body>
@@ -31,12 +20,11 @@
 			<div id="card">
 				<div id="particles-card-container">
 					<div id="particles-card"></div>
-					<script>particlesJS("particles-card", {"particles":{"number":{"value":32,"density":{"enable":false,"value_area":512}},"color":{"value":"#dfdda2"},"shape":{"type":"polygon","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":0.6,"random":true,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":4.09946952864299,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#dfdda2","opacity":0.4,"width":1},"move":{"enable":true,"speed":0.25,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"repulse"},"onclick":{"enable":false,"mode":"push"},"resize":true},"modes":{"grab":{"distance":400,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true});</script>
 				</div>
 
 				<div id="front">
 					<div id="monero">
-						<img src="/static/images/monero.svg" alt="Monero logo">
+						<img src="/static/images/monero.svg" width="34" height="34">
 						<h1>MONERO</h1>
 					</div>
 
@@ -49,7 +37,7 @@
 
 				<div id="back">
 					<div id="address" class="balance-label"></div>
-					<img id="qr" alt="QR code" width="226" height="226">
+					<img id="qr" width="226" height="226">
 				</div>
 			</div>
 		</header>
@@ -77,4 +65,15 @@
 			</span>
 		</footer>
 	</body>
+
+	<script src="/static/vendor/js/moment.min.js"></script>
+	<script src="/static/vendor/js/chart.min.js"></script>
+	<script src="/static/vendor/js/overlay-scrollbars.min.js"></script>
+	<script src="/static/vendor/js/particles.min.js"></script>
+	<script src="/static/vendor/js/animate.css.min.js"></script>
+	<script src="/static/vendor/js/list.min.js"></script>
+
+	<script src="/static/js/util.js"></script>
+	<script src="/static/js/layout.js"></script>
+	<script src="/static/js/{{.}}.js"></script>
 </html>
