@@ -22,7 +22,7 @@ func history(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	historyEvent()
+	go historyEvent()
 }
 
 func historyEvent() {

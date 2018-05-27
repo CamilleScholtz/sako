@@ -60,6 +60,7 @@ func updateGraph() {
 		ETH   Graph
 	}{}
 
+	// TODO: Only use this for the graph and not for the title?
 	msg.Price, err = cryptoComparePrice("XMR")
 	if err != nil {
 		log.Print(err)

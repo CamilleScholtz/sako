@@ -1,21 +1,21 @@
-{{define "settings"}}
-
-{{template "layout-start" .}}
-
-<div id="background">
-	<canvas id="graph"></canvas>
-	<div id="gradient"></div>
-</div>
+{{define "main"}}
 
 <form action="/settings" method="post">
+	<input type="text" name="daemon">
+	<input type="text" name="rpc">
+
+	<hr>
+
+	<input type="text" name="host">
+
+	<hr>
+
 	<select name="currency">
-		<option value="USD" {{if eq .Config.Currency "USD"}}selected{{end}}>USD</option>
-		<option value="EUR" {{if eq .Config.Currency "EUR"}}selected{{end}}>EUR</option>
+		<option value="USD">USD</option>
+		<option value="EUR">EUR</option>
 	</select>
 
 	<input type="submit" value="Save">
 </form>
-
-{{template "layout-end" .}}
 
 {{end}}
