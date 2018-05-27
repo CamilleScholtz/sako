@@ -1,6 +1,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/onodera-punpun/sako)](https://goreportcard.com/report/github.com/onodera-punpun/sako)
 
-A self-hosted Monero web-interface. **WIP**
+![sako](https://punpun.moe/qsQX.svg)
+
+sako. A self-hosted Monero web-interface. **WIP**
+
+
+## SCROTS
 
 ![](https://punpun.moe/9N93.png)
 

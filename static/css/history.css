@@ -1,4 +1,4 @@
-#history {
+main #history {
 	height: 100%;
 	margin-top: 1px;
 }
@@ -7,39 +7,39 @@
 /* Buttons */
 
 /* TODO: Use fontawesome. */
-#history .desc:after {
+main #history .desc:after {
 	content: " ▲";
 }
 
-#history .asc:after {
+main #history .asc:after {
 	content: " ▼";
 }
 
 
 /* List */
 
-#history .list {
+main #history .list {
 	margin-left: calc(50% - (100px + 30px));
 }
 
-#history .list li {
+main #history .list li {
 	width: 128px;
 	height: 256px;
 }
 
-#history .list li:nth-child(odd) {
+main #history .list li:nth-child(odd) {
 	border-right: 50px solid #F5EAE6;
 	box-shadow: 3px 0px 0px #E6D6CE;
 	margin-left: -91px;
 }
 
-#history .list li:nth-child(even) {
+main #history .list li:nth-child(even) {
 	border-left: 50px solid #F5EAE6;
 	box-shadow: -3px 0px 0px #E6D6CE;
 	margin-left: 90px;
 }
 
-#history .list li:before {
+main #history .list li:before {
 	content: "";
 	background: #6B734B;
 	height: 128px;
@@ -47,45 +47,45 @@
 	width: 3px;
 }
 
-#history .list li:nth-child(odd):before {
+main #history .list li:nth-child(odd):before {
 	margin-left: 178px;
 }
 
-#history .list li:nth-child(even):before {
+main #history .list li:nth-child(even):before {
 	margin-left: -53px;
 }
 
 
 /* Info block */
 
-#history .list li .info {
+main #history .list li .info {
 	background: #6B734B;
 	height: 128px;
 	width: 128px;
 }
 
-#history .list li:nth-child(odd) .info {
+main #history .list li:nth-child(odd) .info {
 }
 
-#history .list li:nth-child(even) .info {
+main #history .list li:nth-child(even) .info {
 }
 
 
-#history .list li .info .icon {
+main #history .list li .info .icon {
 	font-size: 20px;
 	padding: 4px;
 	padding-left: 2px;
 	position: absolute;
 }
 
-#history .list li .info .day {
+main #history .list li .info .day {
 	display: block;
 	font-size: 48px;
 	padding-top: 7px;
 	text-align: center;
 }
 
-#history .list li .info .month {
+main #history .list li .info .month {
 	display: block;
 	font-size: 20px;
 	margin-top: -2px;
@@ -93,7 +93,7 @@
 	text-transform: uppercase;
 }
 
-#history .list li .info .since {
+main #history .list li .info .since {
 	color: #C0C3A3;
 	display: block;
 	text-align: center;
