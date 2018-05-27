@@ -70,11 +70,12 @@ func (c *Conn) WriteJSON(value interface{}) error {
 // the specified event, returns an error if the connection is already closed or
 // if the encoding failed.
 func (c *Conn) WriteJSONEvent(name string, value interface{}) error {
-	if by, err := json.Marshal(value); err == nil {
-		return c.WriteEvent(name, by)
-	} else {
+	b, err := json.Marshal(value)
+	if err != nil {
 		return err
 	}
+
+	return c.WriteEvent(name, b)
 }
 
 // IsOpen returns whether the connection is still opened.
