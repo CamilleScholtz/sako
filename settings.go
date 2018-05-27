@@ -8,12 +8,6 @@ import (
 	"time"
 )
 
-// TODO: Possibly use an universal model.
-type settingsModel struct {
-	string
-	Config Config
-}
-
 func settings(w http.ResponseWriter, r *http.Request) {
 	// Handle POST requests.
 	if r.Method == http.MethodPost {

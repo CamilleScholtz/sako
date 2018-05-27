@@ -68,7 +68,7 @@ func main() {
 	mux.HandleFunc("/info", info)
 	mux.HandleFunc("/history", history)
 	mux.HandleFunc("/settings", settings)
-	//mux.HandleFunc("/about", about)
+	mux.HandleFunc("/about", about)
 
 	// Handle static assets.
 	mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.
