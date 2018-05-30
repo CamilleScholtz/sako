@@ -1,6 +1,6 @@
 <table width="100%">
 	<tr>
-		<td align="left" width="70%">
+		<td align="left" width="70">
 			<img src="https://punpun.moe/qsQX.svg" height="80" align="left">
 			<h2>sako</h2>
 		</td>
@@ -16,8 +16,6 @@
 		</td>
 	</tr>
 </table>
-
----
 
 
 ## SCROTS
