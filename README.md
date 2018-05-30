@@ -1,8 +1,23 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/onodera-punpun/sako)](https://goreportcard.com/report/github.com/onodera-punpun/sako)
+<table width="100%">
+	<tr>
+		<td align="left" width="70%">
+			<img src="https://punpun.moe/qsQX.svg" height="80" align="left">
+			<h2>sako</h2>
+		</td>
+		<td align="right" width="20%">
+			<a href="https://goreportcard.com/report/github.com/onodera-punpun/sako">
+				<img src="https://goreportcard.com/badge/github.com/onodera-punpun/sako">
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			A self-hosted Monero web-interface.
+		</td>
+	</tr>
+</table>
 
-![sako](https://punpun.moe/qsQX.svg)
-
-sako. A self-hosted Monero web-interface. **WIP**
+---
 
 
 ## SCROTS
