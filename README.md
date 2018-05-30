@@ -1,18 +1,21 @@
 <table width="100%">
 	<tr>
-		<td align="left" width="70">
+		<td align="left" width="86%">
 			<img src="https://punpun.moe/qsQX.svg" height="80" align="left">
 			<h2>sako</h2>
 		</td>
-		<td align="right" width="20%">
+		<td align="right">
 			<a href="https://goreportcard.com/report/github.com/onodera-punpun/sako">
-				<img src="https://goreportcard.com/badge/github.com/onodera-punpun/sako">
+				<img src="https://img.shields.io/badge/go report-A+-green.svg">
+			</a>
+			<a href="https://punpun.moe/donate">
+				<img src="https://img.shields.io/badge/dontate-XMR-orange.svg">
 			</a>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
-			A self-hosted Monero web-interface.
+			A self-hosted Monero web-interface. <i>(work in progress)<i>
 		</td>
 	</tr>
 </table>
