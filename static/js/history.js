@@ -5,7 +5,7 @@ var list = new List("history", {
 	item:       "<li><div class=\"info\"><span class=\"icon\"></span><span class=\"date\"></span><span class=\"since\"></span></div><h2 class=\"amount\"></h2></li>",
 });
 
-source.addEventListener("history", function(event) {
+source.addEventListener("history", event => {
 	const msg = JSON.parse(event.data);
 
 	for (k in msg.Transfers) {
@@ -29,7 +29,7 @@ source.addEventListener("history", function(event) {
 			break;
 		}
 
-		msg.Transfers[k].forEach(function(transfer) {
+		msg.Transfers[k].forEach(transfer => {
 			// Skip TXID's already in the list.
 			if (list.get("txid", transfer.txid).length) {
 				return;
@@ -63,21 +63,19 @@ source.addEventListener("history", function(event) {
 
 // Hide scrollbar.
 // TODO: This is kind of a bloated of doing this, fix?
-OverlayScrollbars(document.querySelectorAll('main'), {
+OverlayScrollbars(document.querySelectorAll("main"), {
 	className: null,
 });
 
 // Set default sorting.
 list.sort("timestamp", {order: "desc"});
 
-document.getElementById("filter").addEventListener("change", function() {
-	const self = this;
-
-	list.filter(function(item) {
-		if (self.value == "all") {
+document.getElementById("filter").addEventListener("change", event => {
+	list.filter(item => {
+		if (event.target.value == "all") {
 			return true;
 		} else {
-			return item.values().icon.includes(self.value);
+			return item.values().icon.includes(event.target.value);
 		}
 	});
 });

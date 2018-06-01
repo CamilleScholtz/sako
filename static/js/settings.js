@@ -1,4 +1,4 @@
-source.addEventListener("settings", function(event) {
+source.addEventListener("settings", event => {
 	const msg = JSON.parse(event.data);
 
 	document.getElementsByName("daemon")[0].value = msg.Daemon;

@@ -1,4 +1,4 @@
-source.addEventListener("sidebar", function(event) {
+source.addEventListener("sidebar", event => {
 	const msg = JSON.parse(event.data);
 
 	// Update card info.
@@ -17,7 +17,7 @@ source.addEventListener("sidebar", function(event) {
 	}
 });
 
-source.addEventListener("price", function(event) {
+source.addEventListener("price", event => {
 	const msg = JSON.parse(event.data);
 
 	// Update title to display the current XMR value.
@@ -26,34 +26,30 @@ source.addEventListener("price", function(event) {
 });
 
 // Flip the card on click.
-["click", "ontouchstart"].forEach(function(evt) {
-	document.getElementById("card").addEventListener(evt, function() {
-		if (this.classList.contains("flip")) {
-			this.classList.remove("flip");
-		} else {
-			this.classList.add("flip");
-		}
+["click", "ontouchstart"].forEach(trigger => {
+	document.getElementById("card").addEventListener(trigger, event => {
+		event.currentTarget.classList.toggle("flip");
 	});
 });
 
 // Select the address on click.
-["click", "ontouchstart"].forEach(function(evt) {
-	document.getElementById("address").addEventListener(evt, function() {
-		window.getSelection().selectAllChildren(this);
+["click", "ontouchstart"].forEach(trigger => {
+	document.getElementById("address").addEventListener(trigger, event => {
+		window.getSelection().selectAllChildren(event.target);
 	});
 });
 
 // Toggle the nav on responsive layouts.
-["click", "ontouchstart"].forEach(function(evt) {
-	document.getElementById("hamburger").addEventListener(evt, function() {
+["click", "ontouchstart"].forEach(trigger => {
+	document.getElementById("hamburger").addEventListener(trigger, event => {
 		const nav = document.getElementsByTagName("nav")[0];
 
-		this.animate("jello");
+		event.target.animate("jello");
+		nav.classList.toggle("expanded");
+		// TODO: Simplify this.
 		if (this.classList.contains("fa-bars")) {
-			nav.classList.add("expanded");
 			this.classList.replace("fa-bars", "fa-times");
 		} else {
-			nav.classList.remove("expanded");
 			this.classList.replace("fa-times", "fa-bars");
 		}
 	});
@@ -119,6 +115,9 @@ particlesJS(
 			"detect_on": "canvas",
 			"events": {
 				"onhover": {
+					"enable": false,
+				},
+				"onclick": {
 					"enable": false,
 				},
 				"resize": true,

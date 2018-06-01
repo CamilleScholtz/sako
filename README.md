@@ -1,6 +1,6 @@
 <table width="100%">
 	<tr>
-		<td align="left" width="86%">
+		<td align="left" width="87%">
 			<img src="https://punpun.moe/qsQX.svg" height="80" align="left">
 			<h2>sako</h2>
 		</td>
@@ -15,7 +15,7 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			A self-hosted Monero web-interface. <i>(work in progress)<i>
+			A self-hosted Monero wallet web-interface. <i>(work in progress)<i>
 		</td>
 	</tr>
 </table>
@@ -49,8 +49,3 @@ entire Monero blockchain you can use an external node using`monero-wallet-rpc
 ## AUTHORS
 
 Camille Scholtz
-
-
-## DONATE
-
-`43N66aiA9392qz7pTFAfSe1qJxrxDACDhMvcTVv5uPkWK37XSCMxaeqg2PTp8NeZMuaGcjatuQCaoCFrUdRxuQX71mBnwvr`

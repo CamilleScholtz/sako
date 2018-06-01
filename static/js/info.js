@@ -24,7 +24,7 @@ var graphData = {
 	labels: Array.apply(null, {length: 48}).map(Number.call, Number),
 };
 
-source.addEventListener("graph", function(event) {
+source.addEventListener("graph", event => {
 	const msg = JSON.parse(event.data);
 
 	// Update title to display the current XMR value.
@@ -63,12 +63,12 @@ source.addEventListener("graph", function(event) {
 	});
 });
 
-source.addEventListener("submissions", function(event) {
+source.addEventListener("submissions", event => {
 	const msg = JSON.parse(event.data);
 
 	// Update submissions feed.
 	var content = "";
-	msg.forEach(function(d) {
+	msg.forEach(d => {
 		content += "<div class=\"story\">";
 		content += "<span class=\"source\">" + d.Source + "</span> &nbsp;";
 		content += "<small>" + moment.unix(d.Time).fromNow() + "</small>";
@@ -80,12 +80,12 @@ source.addEventListener("submissions", function(event) {
 	document.getElementById("submissions").innerHTML = content;
 });
 
-source.addEventListener("funding", function(event) {
+source.addEventListener("funding", event => {
 	const msg = JSON.parse(event.data);
 
 	// Update funding feed.
 	var content = "";
-	msg.forEach(function(d) {
+	msg.forEach(d => {
 		content += "<div class=\"project\">";
 		content += "<a href=\"" + d.URL + "\" target=\"_blank\">" + d.Title +
 			"</a>";
@@ -99,12 +99,13 @@ source.addEventListener("funding", function(event) {
 	document.getElementById("funding").innerHTML = content;
 });
 
-window.graph = new Chart(document.getElementById("graph").getContext("2d"), {
+window.graph = new Chart(document.getElementById("graph").getContext("2d", {
+	alpha: false,
+}), {
 	type: "line",
 	data: graphData,
 	options: {
 		maintainAspectRatio: false,
-		events: [],
 		responsive: true,
 		legend: {
 			display: false

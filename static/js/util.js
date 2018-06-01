@@ -1,5 +1,5 @@
 var source = new EventSource("event");
-window.addEventListener("beforeunload", function(event) {
+window.addEventListener("beforeunload", event => {
 	source.close();
 });
 
