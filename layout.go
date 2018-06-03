@@ -17,7 +17,7 @@ func updateSidebar() {
 		UnBalance string
 		Address   string
 		CurHeight uint64
-		MaxHeight int64
+		MaxHeight uint64
 	}{}
 
 	b, u, err := wallet.GetBalance()

@@ -33,6 +33,7 @@ func infoEvent() {
 
 	// TODO: Can I somehow do an instant first tick?
 	go updateSidebar()
+	go updatePrice()
 	go updateGraph()
 	go updateSubmissions()
 	go updateFunding()
@@ -41,6 +42,7 @@ func infoEvent() {
 		select {
 		case <-tick.C:
 			go updateSidebar()
+			go updatePrice()
 			go updateGraph()
 		case <-slow.C:
 			go updateSubmissions()

@@ -36,14 +36,14 @@ source.addEventListener("history", event => {
 			}
 
 			list.add({
-				txid:      transfer.txid,
+				txid: transfer.txid,
 				timestamp: transfer.timestamp,
-				date:      moment.unix(transfer.timestamp).format("[<span class=\"day\">]D[</span><span class=\"month\">]MMM[</span>]"),
-				since:     moment.unix(transfer.timestamp).fromNow(),
-				amount:    (transfer.amount / 1e12).toFixed(12),
-				fee:       (transfer.fee / 1e12).toFixed(12),
-				height:    transfer.height,
-				icon:      icon,
+				date: moment.unix(transfer.timestamp).format("[<span class=\"day\">]D[</span><span class=\"month\">]MMM[</span>]"),
+				since: moment.unix(transfer.timestamp).fromNow(),
+				amount: (transfer.amount / 1e12).toFixed(12),
+				fee: (transfer.fee / 1e12).toFixed(12),
+				height: transfer.height,
+				icon: icon,
 			});
 		});
 	}
@@ -74,8 +74,8 @@ document.getElementById("filter").addEventListener("change", event => {
 	list.filter(item => {
 		if (event.target.value == "all") {
 			return true;
-		} else {
-			return item.values().icon.includes(event.target.value);
 		}
+
+		return item.values().icon.includes(event.target.value);
 	});
 });

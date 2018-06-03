@@ -27,10 +27,6 @@ var graphData = {
 source.addEventListener("graph", event => {
 	const msg = JSON.parse(event.data);
 
-	// Update title to display the current XMR value.
-	document.title = document.title.replace(/.[0-9]+\.[0-9]+|\?/, msg.Price.
-		Symbol + msg.Price.Value.toFixed(2));
-
 	// Update graph.
 	graphData.labels = msg.XMR.Time;
 	graphData.datasets[0].data = msg.XMR.Value;
@@ -38,17 +34,15 @@ source.addEventListener("graph", event => {
 	graphData.datasets[2].data = msg.ETH.Value;
 	graph.update();
 
-	// Determine if the XMR value went up or down and act accordingly.
-	var dir = "";
 	const price = document.getElementById("price");
 	const change = document.getElementById("change");
-	if (msg.Price.Value < msg.XMR.Value[0]) {
-		dir = "<i class=\"fa fa-level-down text-red\"></i> ";
-		change.className = "text-red";
-	} else {
-		dir = "<i class=\"fa fa-level-up text-green\"></i> ";
-		change.className = "text-green";
+
+	// Return (so the bounce animation doesn't play) if the XMR value didn't
+	// change.
+	if (price.dataset.price == msg.Price.Value) {
+		return;
 	}
+	price.dataset.price = msg.Price.Value;
 
 	// Nice bounce animation on change.
 	price.animate("bounce");
@@ -58,8 +52,20 @@ source.addEventListener("graph", event => {
 	// animation.
 	sleep(450).then(() => {
 		price.innerHTML = msg.Price.Symbol + formatFiat(msg.Price.Value);
-		change.innerHTML = dir + Math.abs(((msg.Price.Value/msg.XMR.Value[0])-
-			1)*100).toFixed(2) + "%";
+
+		const percent = Math.abs(((msg.Price.Value/msg.XMR.Value[0])-1)*100).
+			toFixed(2);
+
+		// Determine if the XMR value went up or down and act accordingly.
+		if (msg.Price.Value < msg.XMR.Value[0]) {
+			change.innerHTML = "<i class=\"fa fa-level-down text-red\"></i> " +
+				percent + "%";
+			change.className = "text-red";
+		} else {
+			change.innerHTML = "<i class=\"fa fa-level-up text-green\"></i> " +
+				percent + "%";
+			change.className = "text-green";
+		}
 	});
 });
 

@@ -46,13 +46,13 @@ func (d *Daemon) request(m string, p, t interface{}) error {
 }
 
 type daemonHeightRes struct {
-	Count int64 `json:"count"`
+	Count uint64 `json:"count"`
 }
 
 // Height returns the daemon's current block height.
-func (d *Daemon) Height() (int64, error) {
+func (d *Daemon) Height() (uint64, error) {
 	var t = struct {
-		Count int64 `json:"count"`
+		Count uint64 `json:"count"`
 	}{}
 
 	if err := d.request("getblockcount", nil, &t); err != nil {

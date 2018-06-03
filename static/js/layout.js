@@ -10,6 +10,7 @@ source.addEventListener("sidebar", event => {
 
 	// Display "Syncing..." in case the current block height doesn't match the
 	// maximum block height.
+	// TODO: This shows "Syncing..." way too often.
 	if (msg.CurHeight != msg.MaxHeight) {
 		document.getElementById("sync").animate("fadeIn", showSync);
 	} else {
@@ -21,8 +22,8 @@ source.addEventListener("price", event => {
 	const msg = JSON.parse(event.data);
 
 	// Update title to display the current XMR value.
-	document.title = document.title.replace(/.[0-9]+\.[0-9]+|\?/, msg.Symbol +
-		msg.Value.toFixed(2));
+	document.title = document.title.replace(/\[.*\]/, "[" + msg.Symbol + msg.
+		Value.toFixed(2)) + "]";
 });
 
 // Flip the card on click.
